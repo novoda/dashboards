@@ -1,0 +1,13 @@
+{
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "main": "src/index.js",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "firebase-admin": "^5.2.1",
+    "firebase-functions": "^0.6.3",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4"
+  },
+  "private": true
+}
