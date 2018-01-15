@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Bitter');
+
+.root {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+} 
+
+.text {
+    margin: 6px;
+    padding: 6px;
+    cursor: pointer;
+    color: black;
+    font-size: 1.2em;
+    min-height: 40px;
+    font-family: 'Bitter' ,serif;
+}
