@@ -1,0 +1,17 @@
+{
+  "name": "master-tick",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node app.js"    
+  },
+  "engines": {
+    "node": "8.x"
+  },
+  "dependencies": {
+    "express": "^4.15.5",
+    "request": "^2.82.0",
+    "request-promise-native": "^1.0.5"
+  }
+}
