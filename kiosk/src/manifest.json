@@ -1,0 +1,26 @@
+{
+  "name": "Dashboard V2 Kiosk",
+  "version": "6",
+  "manifest_version": 2,
+  "minimum_chrome_version": "49.0.0.0",
+  "permissions": [
+    "webview",
+    "power",
+    "pointerLock",
+    "fullscreen",
+    "alarms",
+    "app.window.fullscreen.overrideEsc"
+  ],
+  "app": {
+    "background": {
+      "scripts": [
+        "background_main.js"
+      ]
+    }
+  },
+  "kiosk_enabled": true,
+  "default_locale": "en",
+  "icons": {
+    "128": "img/128.png"
+  }
+}
