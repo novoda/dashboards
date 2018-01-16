@@ -5,7 +5,7 @@ const config = require('./config.json')
 const app = express();
 
 app.get('/tasks/tick', (req, res) => {
-    http.post(config.tickEndpoint)
+    http.post(`https://us-central1-${config.projectId}.cloudfunctions.net/masterTick`)
         .then(() => {
             res.status(200).send().end()
         }).catch(err => {
