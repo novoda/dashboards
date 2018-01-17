@@ -14,55 +14,63 @@ const args = process.argv.slice(2);
 const pluginPath = args[0]
 const config = args[1] || DEFAULT_CONFIG
 
-const plugin = require(pluginPath).plugin()
-
-const request = {
-    body: {
-        type: 'query',
-        callbackUrl: `http://localhost:${config.port}/callback`,
-        configuration: {}
-    }
-}
-
-const response = {
-    status: (code) => {
-        return {
-            send: (payload) => {
-                // do nothing
-            }
-        }
-    }
-}
-
 app.use(bodyParser.json({ limit: '50mb' }));
 
-const IFRAME_STYLE = 'width: 100%; height: 100vh; border: none; position: absolute'
-
-const toHtmlPage = (element) => {
-    const HEAD = '<head><meta charset="utf-8"></head>'
-    const STYLE = '<style>body { margin: 0; }</style>'
-    return `<!doctype html><html lang="en">${HEAD}${STYLE}<body>${element}</body></html>`
-}
-
-app.post('/callback', (request, response) => {
-    const iframePayload = encodeURIComponent(toHtmlPage(request.body.html))
-    const iframe = `<iframe style="${IFRAME_STYLE}" src="data:text/html,${iframePayload}"/>`
-    const html = toHtmlPage(`<div id="root">${iframe}</div>`)
-    io.emit('update', html)
-    response.end()
-})
+const plugin = require(pluginPath).plugin()
 
 app.get('/', (request, response) => {
     response.sendFile(__dirname + '/index.html');
 })
 
-io.on('connection', (socket) => {
-    plugin(request, response)
-});
+app.post('/callback', (request, response) => {
+    const html = createDashboardPayload(request.body.html)
+    io.emit('update', html)
+    response.end()
+})
 
 http.listen(config.port)
 
+io.on('connection', (socket) => {
+    requestPluginRedraw()
+});
+
 chokidar.watch(args[0], { ignored: /(^|[\/\\])\../ })
     .on('change', path => {
-        plugin(request, response)
+        requestPluginRedraw()
     })
+
+const createDashboardPayload = (htmlInput) => {
+    const IFRAME_STYLE = 'width: 100%; height: 100vh; border: none; position: absolute'
+
+    const toHtmlPage = (element) => {
+        const HEAD = '<head><meta charset="utf-8"></head>'
+        const STYLE = '<style>body { margin: 0; }</style>'
+        return `<!doctype html><html lang="en">${HEAD}${STYLE}<body>${element}</body></html>`
+    }
+
+    const iframePayload = encodeURIComponent(toHtmlPage(htmlInput))
+    const iframe = `<iframe style="${IFRAME_STYLE}" src="data:text/html,${iframePayload}"/>`
+    return toHtmlPage(`<div id="root">${iframe}</div>`)
+}
+
+const requestPluginRedraw = () => {
+    const request = {
+        body: {
+            type: 'query',
+            callbackUrl: `http://localhost:${config.port}/callback`,
+            configuration: {}
+        }
+    }
+
+    const response = {
+        status: () => {
+            return {
+                send: (message) => { }
+            }
+        }
+    }
+
+    plugin(request, response)
+}
+
+
