@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Plugin tester</title>
+</head>
+
+<body>
+    <object id="frame"></object>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        socket.on('update', html => {
+            document.getElementById('frame').innerHTML = html
+        })
+    </script>
+</body>
+
+</html>
