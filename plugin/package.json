@@ -1,11 +1,11 @@
 {
   "name": "dashboard-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "lib/index.js",
   "repository": {},
   "license": "MIT",
   "dependencies": {
-    "inliner": "^1.12.5",
+    "inliner": "git+https://github.com/ouchadam/inliner.git#cache-per-instance",
     "mustache": "^2.3.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
