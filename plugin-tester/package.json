@@ -1,6 +1,6 @@
 {
   "name": "plugin-tester",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "src/index.js",
   "license": "MIT",
   "private": true,
@@ -10,8 +10,10 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "chokidar": "^2.0.0",
+    "commander": "^2.13.0",
     "express": "^4.16.2",
-    "optimist": "^0.6.1",
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5",
     "socket.io": "^2.0.4"
   }
 }
