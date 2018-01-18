@@ -8,6 +8,11 @@ const bodyParser = require('body-parser');
 const fs = require('fs')
 const path = require('path')
 
+const args = require('optimist')
+.demand('i', 'Path to module or url to hosted plugin')
+.default('p', 5000)
+.argv
+
 const DEFAULT_CONFIG = { port: 5000 }
 
 const args = process.argv.slice(2);
