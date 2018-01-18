@@ -16,7 +16,7 @@ program.version('0.0.1')
         server.start()
         if (options.watch) {
             chokidar
-                .watch(args[0], { ignored: /(^|[\/\\])\../ })
+                .watch(path, { ignored: /(^|[\/\\])\../ })
                 .on('change', pluginRunner)
         }
     })
