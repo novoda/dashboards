@@ -18,7 +18,6 @@
     }
   },
   "kiosk_enabled": true,
-  "default_locale": "en",
   "icons": {
     "128": "icons/128.png"
   }
