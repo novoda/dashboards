@@ -8,8 +8,8 @@ const path = require('path')
 const program = require('commander')
 program.version('0.0.1')
     .command('local <path>')
-    .option('-w', '--watch', 'Watch the source directory for changes')
-    .option('-p', '--port', 'Port')
+    .option('-w, --watch', 'Watch the source directory for changes')
+    .option('-p --port', 'Port')
     .action((inputPath, options) => {
         const port = options.port || 5000
         const absolutePath = path.resolve(inputPath)
