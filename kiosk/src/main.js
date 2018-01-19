@@ -1,14 +1,3 @@
-window.config = {
-    'model_': 'AppConfig',
-    'id': 1,
-    'appName': 'Dashboard V2 Kiosk',
-    'enableNavBttns': false,
-    'enableHomeBttn': false,
-    'enableReloadBttn': false,
-    'enableLogoutBttn': false,
-    'kioskEnabled': true
-}
-
 const runApp = function () {
     if (chrome.power) {
         chrome.power.requestKeepAwake('display');
@@ -17,7 +6,6 @@ const runApp = function () {
         id: 'main',
         state: 'fullscreen',
     })
-    chrome.app.window.current().fullscreen();
 }
 
 chrome.app.runtime.onLaunched.addListener(function () {

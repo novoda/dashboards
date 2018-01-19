@@ -8,13 +8,12 @@
     "power",
     "pointerLock",
     "fullscreen",
-    "alarms",
-    "app.window.fullscreen.overrideEsc"
+    "alarms"
   ],
   "app": {
     "background": {
       "scripts": [
-        "background_main.js"
+        "main.js"
       ]
     }
   },
