@@ -1,6 +1,6 @@
 {
-  "name": "Dashboard V2 Kiosk",
-  "version": "6",
+  "name": "Dashboard Kiosk",
+  "version": "1",
   "manifest_version": 2,
   "minimum_chrome_version": "49.0.0.0",
   "permissions": [
@@ -20,6 +20,6 @@
   "kiosk_enabled": true,
   "default_locale": "en",
   "icons": {
-    "128": "img/128.png"
+    "128": "icons/128.png"
   }
 }
