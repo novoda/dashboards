@@ -1,7 +1,11 @@
 {
   "name": "Dashboard Kiosk",
-  "version": "1.1",
+  "short_name": "Dashboard Kiosk",
+  "description": "Dashboard app launcher",
+  "default_locale": "en",
+  "author": "Novoda",
   "manifest_version": 2,
+  "version": "1.1",
   "permissions": [
     "webview",
     "power",
@@ -20,5 +24,6 @@
   "kiosk_enabled": true,
   "icons": {
     "128": "icons/128.png"
-  }
+  },
+  "update_url": "https://clients2.google.com/service/update2/crx"
 }
