@@ -9,7 +9,7 @@ The typical usage will be to use the `templated` plugin which allows a plugin de
 `viewstate generating function`. 
 
 
-```
+```javascript
 const plugin = require('dashboard-plugin').templated
 const component = {
     template: 'path/to/html.html',
