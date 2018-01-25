@@ -1,26 +1,28 @@
 {
-  "name": "Dashboard V2 Kiosk",
-  "version": "6",
+  "name": "Dashboard Kiosk",
+  "short_name": "Dashboard Kiosk",
+  "description": "Dashboard app launcher",
+  "author": "Novoda",
   "manifest_version": 2,
-  "minimum_chrome_version": "49.0.0.0",
+  "version": "1.1.1",
   "permissions": [
     "webview",
     "power",
     "pointerLock",
     "fullscreen",
-    "alarms",
-    "app.window.fullscreen.overrideEsc"
+    "alarms"
   ],
   "app": {
     "background": {
       "scripts": [
-        "background_main.js"
-      ]
+        "main.js"
+      ],
+      "persistent": false
     }
   },
   "kiosk_enabled": true,
-  "default_locale": "en",
   "icons": {
-    "128": "img/128.png"
-  }
+    "128": "icons/128.png"
+  },
+  "update_url": "https://clients2.google.com/service/update2/crx"
 }
