@@ -5,7 +5,7 @@
   "repository": {},
   "license": "MIT",
   "dependencies": {
-    "inliner": "git+https://github.com/ouchadam/inliner.git#cache-per-instance",
+    "inliner": "git+https://github.com/ouchadam/inliner.git#cache-and-version",
     "mustache": "^2.3.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
