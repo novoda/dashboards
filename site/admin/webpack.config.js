@@ -27,11 +27,10 @@ module.exports = {
         publicPath: '/admin',
         filename: 'bundle.js',
     },
-    target: 'web',
     resolve: {
-        extensions: ['.js', '.jsx'],
-        mainFields: ['main']
+        extensions: ['.js', '.jsx']
     },
+    target: 'web',
     module: {
         loaders: [
             // .ts, .tsx
@@ -113,12 +112,6 @@ module.exports = {
         },
         historyApiFallback: {
             index: 'admin/index.html'
-        },
-    },
-    node: {
-        // workaround for webpack-dev-server issue
-        // https://github.com/webpack/webpack-dev-server/issues/60#issuecomment-103411179
-        fs: 'empty',
-        net: 'empty'
+        }
     }
 }
