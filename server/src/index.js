@@ -241,7 +241,7 @@ exports.onDeviceDeleted = functions.database.ref('/v2/devices/{deviceId}').onDel
     return Promise.all([devicesData, topicToDevice])
 })
 
-exports.onPluginDeleted = functions.database.ref('v2/plugin/{pluginId}').onDelete(event => {
+exports.onPluginDeleted = functions.database.ref('v2/plugins/{pluginId}').onDelete(event => {
     const database = event.data.ref.root
     const pluginId = event.params.pluginId
     return database.child(`/v2/plugin_instances/${deviceId}`).remove()
