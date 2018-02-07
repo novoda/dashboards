@@ -162,7 +162,6 @@ export const setPluginInstance = (pluginId, instanceId) => (payload) => {
     return firebase.set(`plugin_instances/${pluginId}/${instanceId}`)(payload)
 }
 
-
 const emptyOrContinue = (data) => {
     return data || []
 }
@@ -189,4 +188,8 @@ export const setDeviceTopic = (topicId, deviceId) => {
 
 export const removeDevice = (deviceId) => {
     return firebase.remove(`devices/${deviceId}`)()
+}
+
+export const removePlugin = (pluginId) => {
+    return firebase.remove(`plugins/${pluginId}`)()
 }

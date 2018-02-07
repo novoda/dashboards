@@ -9,7 +9,7 @@ const toContent = (plugin) => {
     }
 }
 
-export const PluginsView = ({ loading, plugins }) => {
+export const PluginsView = ({ loading, plugins, onDelete }) => {
     if (loading) {
         return (
             <h1>Loading!</h1>
@@ -19,7 +19,8 @@ export const PluginsView = ({ loading, plugins }) => {
             <div>
                 <ContentView
                     content={plugins.map(toContent)}
-                    clickThrough="/admin/plugins" />
+                    clickThrough="/admin/plugins"
+                    onDelete={onDelete} />
                 <AddFabView link='/admin/plugins/add' />
             </div>
         )
