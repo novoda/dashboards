@@ -18,7 +18,8 @@ const styles = {
     },
     optionsMenu: {
         position: 'absolute',
-        right: 0
+        right: 0,
+        zIndex: 1000
     }
 };
 
