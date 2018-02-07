@@ -8,7 +8,7 @@ export const AppBarView = ({ title, onBack }) => {
         <AppBar
             title={<span>{title}</span>}
             iconElementLeft={<IconButton><NavigationArrowBack /></IconButton>}
-            onLeftIconButtonTouchTap={onBack}
+            onLeftIconButtonClick={onBack}
         />
     )
 }
