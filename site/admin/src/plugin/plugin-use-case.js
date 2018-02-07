@@ -1,6 +1,6 @@
 import { readPluginInstancesForPluginId, readPlugin } from '../dashboard-repository'
 import * as Actions from './plugin-actions'
-import * as config from '../config'
+import config from '../config'
 
 export const fetchPlugin = (dispatch) => async (pluginId) => {
     const plugin = await readPlugin(pluginId)
