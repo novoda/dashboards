@@ -244,7 +244,7 @@ exports.onDeviceDeleted = functions.database.ref('/v2/devices/{deviceId}').onDel
 exports.onPluginDeleted = functions.database.ref('v2/plugins/{pluginId}').onDelete(event => {
     const database = event.data.ref.root
     const pluginId = event.params.pluginId
-    return database.child(`/v2/plugin_instances/${deviceId}`).remove()
+    return database.child(`/v2/plugin_instances/${pluginId}`).remove()
 })
 
 exports.onPluginInstanceDeleted = functions.database.ref('v2/plugin_instances/{pluginId}/{instanceId}').onDelete(event => {
