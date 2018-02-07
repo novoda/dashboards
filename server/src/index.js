@@ -241,7 +241,7 @@ exports.onDeviceDeleted = functions.database.ref('/v2/devices/{deviceId}').onDel
     return Promise.all([devicesData, topicToDevice])
 })
 
-exports.onPluginDeleted = functions.database.ref('v2/plugins{pluginId}').onDelete(event => {
+exports.onPluginDeleted = functions.database.ref('v2/plugin/{pluginId}').onDelete(event => {
     const database = event.data.ref.root
     const pluginId = event.params.pluginId
     return database.child(`/v2/plugin_instances/${deviceId}`).remove()
@@ -273,6 +273,7 @@ exports.onPluginInstanceRemovedFromTopic = functions.database.ref('/v2/topics/{t
     const removeInstanceToTopic = database
         .child(`/v2/plugin_instance_to_topic/${pluginInstanceId}/${topicId}`)
         .remove()
+        .catch(console.err)
 
     const removeTopicInstanceData = database
         .child(`/v2/topics_data/${event.params.topicId}/${pluginInstanceId}`)
