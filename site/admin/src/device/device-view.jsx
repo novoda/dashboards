@@ -7,16 +7,14 @@ import {
     MenuItem
 } from 'material-ui'
 import { NavigationArrowBack } from 'material-ui/svg-icons'
-import AppBar from 'material-ui/AppBar'
+import { AppBarView } from '../common/common-views'
 
 export const DeviceView = ({ title, submitLabel, device, onBack, onDeviceNameChanged, onDeviceIdChanged, onTopicChanged, onSubmit }) => {
     return (
         <div>
-            <AppBar
+            <AppBarView
                 title={title}
-                iconElementLeft={<IconButton><NavigationArrowBack /></IconButton>}
-                onLeftIconButtonTouchTap={onBack}
-            />
+                onBack={onBack} />
 
             <div>
                 <TextField
