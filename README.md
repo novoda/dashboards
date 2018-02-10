@@ -3,7 +3,7 @@
 [kiosk](https://github.com/novoda/dashboards/tree/master/kiosk)
 
     A chrome app kiosk for use with `chromebit` or other chromeos devices 
-    to display the Dasboard Viewer site.
+    to display the Dashboard Viewer site.
 
 [master-tick](https://github.com/novoda/dashboards/tree/master/master-tick)    
 
@@ -19,8 +19,8 @@
 
 [server](https://github.com/novoda/dashboards/tree/master/server)
 
-    A `firebase serverless` _server_ written in Node.js   
+    A `firebase serverless` server written in Node.js   
     
 [site](https://github.com/novoda/dashboards/tree/master/site) 
 
-    The `Admin` and `Viewer` websites written in Node.js using react & redux. 
+    The `Admin` and `Viewer` websites written in javascript using react & redux. 
