@@ -9,6 +9,7 @@ const program = require('commander')
 
 program.version('0.0.1')
     .command('local <path>')
+    .description('Execute a given plugin module')
     .option('-w, --watch', 'Watch the source directory for changes')
     .option('-p --port', 'Optional local server port. Default 5000')
     .option('-c --config <path>', 'Path to JSON representation of a configuration')
