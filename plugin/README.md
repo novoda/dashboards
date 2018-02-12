@@ -51,24 +51,24 @@ This is achieved by acting on two request body types (create and query):
 
 Request 
 ```json
-    {
-        "type": "create"
-    }
+{
+    "type": "create"
+}
 ```
 
 Response
 ```json
-    {
-        "my-awesome-plugin": {
-            "name": "my awesome plugin",   
-            "template": {
-                "customText": {
-                    "label": "Custom text!",
-                    "type": "string"
-                }
+{
+    "my-awesome-plugin": {
+        "name": "my awesome plugin",   
+        "template": {
+            "customText": {
+                "label": "Custom text!",
+                "type": "string"
             }
         }
     }
+}
 ```
 
 #### Query
@@ -77,22 +77,22 @@ Response
 
 Request
 ```json
-    {
-        "type": "query",
-        "callbackUrl": "...",
-        "configuration": {
-            "customText": {
-                "value": "Hello World"
-            }
-        }
+{
+    "type": "query",
+    "callbackUrl": "...",
+    "configuration": {
+        "customText": {
+            "value": "Hello World"
+        }     
     }
+}
 ```
 
 Response
 ```json
-    {
-        "html": "<html><body>Hello World</body></html>"
-    }
+{
+    "html": "<html><body>Hello World</body></html>"
+}
 ```
 
 Putting it all together as a Firebase function

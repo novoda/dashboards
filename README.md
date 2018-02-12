@@ -1,9 +1,32 @@
-## Novoda Dashboards
+## About 
+Novoda dashboards share 'at a glance' challenges and experiences of our globally dirtributed colleagues.
+Dashboards are viewed in two differents Contexts: _Office_ & _Project_.
+
+### Office: Informational, Operational, Cultural
+Transparency & community is at the heart of Novoda and our tools must reinforce our values. 
+[SMART](https://www.mindtools.com/pages/article/smart-goals.htm) Office screens should:
+* Promote our mission of togetherness on a journey of learning and growth
+* Link Novoda's digital & physical community
+* Ensure awareness of company ceremonies & process
+* Share achievements, challenges & goals
+* Share organic team building opportunities
+
+### Project: Strategic, operational, analytical
+Sharing humanised, simplified and useful information is the best way our teams can be aligned to a project's goal. Our teams care about our contributions and their outcomes and so always want to share in an understanding of the metrics of success.
+[SMART](https://www.mindtools.com/pages/article/smart-goals.htm) Team screens should:
+* Represent the team's overarching Mission set by the PO
+* Share team specific roadmaps, challenges & goals
+* Ensure awareness of team specific ceremonies & processes
+* Share organic team building opportunities
+* Celebrate standout team contributions
+
+
+## Project Structure
 
 [kiosk](https://github.com/novoda/dashboards/tree/master/kiosk)
 
     A chrome app kiosk for use with `chromebit` or other chromeos devices 
-    to display the Dasboard Viewer site.
+    to display the Dashboard Viewer site.
 
 [master-tick](https://github.com/novoda/dashboards/tree/master/master-tick)    
 
@@ -19,8 +42,8 @@
 
 [server](https://github.com/novoda/dashboards/tree/master/server)
 
-    A `firebase serverless` _server_ written in Node.js   
+    A `firebase serverless` server written in Node.js   
     
 [site](https://github.com/novoda/dashboards/tree/master/site) 
 
-    The `Admin` and `Viewer` websites written in Node.js using react & redux. 
+    The `Admin` and `Viewer` websites written in javascript using react & redux. 
