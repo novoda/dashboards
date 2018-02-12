@@ -61,28 +61,6 @@ exports.onPluginInstanceAddedToTopic = functions.database.ref('/v2/topics/{topic
         })
 })
 
-exports.onPluginInstanceRemovedFromTopic = functions.database.ref('/v2/topics/{topicId}/plugin_instances/{instanceId}').onDelete(event => {
-    const pluginInstanceId = event.params.instanceId
-    const topicId = event.params.topicId
-    const database = event.data.ref.root
-
-    const removeInstanceToTopic = database
-        .child(`/v2/plugin_instance_to_topic/${pluginInstanceId}/${topicId}`)
-        .remove()
-
-    const removeTopicInstanceData = database
-        .child(`/v2/topics_data/${event.params.topicId}/${pluginInstanceId}`)
-        .remove()
-
-    const decrementPluginInstanceCountForTopic = database
-        .child(`/v2/topics_index/${topicId}/plugin_instances_count`)
-        .transaction(current => {
-            return (current || 1) - 1
-        })
-
-    return Promise.all([removeInstanceToTopic, removeTopicInstanceData, decrementPluginInstanceCountForTopic])
-})
-
 exports.onTopicCurrentIndex = functions.database.ref('/v2/topics_index/{topicId}/current_index').onUpdate(event => {
     const topicId = event.params.topicId
     const currentIndex = event.data.val()
@@ -261,4 +239,51 @@ exports.onDeviceDeleted = functions.database.ref('/v2/devices/{deviceId}').onDel
         })
 
     return Promise.all([devicesData, topicToDevice])
+})
+
+exports.onPluginDeleted = functions.database.ref('v2/plugins/{pluginId}').onDelete(event => {
+    const database = event.data.ref.root
+    const pluginId = event.params.pluginId
+    return database.child(`/v2/plugin_instances/${pluginId}`).remove()
+})
+
+exports.onPluginInstanceDeleted = functions.database.ref('v2/plugin_instances/{pluginId}/{instanceId}').onDelete(event => {
+    const database = event.data.ref.root
+    const instanceId = event.params.instanceId
+    const cleanUp = [
+        database.child(`/v2/plugin_instances_named/${instanceId}`).remove(),
+        database.child(`/v2/plugin_instances_data/${instanceId}`).remove(),
+        database.child(`/v2/plugin_instance_to_topic/${instanceId}`).remove()
+    ]
+    return Promise.all(cleanUp)
+})
+
+exports.onPluginInstanceDeletedFromTopic = functions.database.ref('v2/plugin_instance_to_topic/{instanceId}/{topicId}').onDelete(event => {
+    const database = event.data.ref.root
+    const instanceId = event.params.instanceId
+    const topicId = event.params.topicId
+    return database.child(`/v2/topics/${topicId}/pluginInstances/{instanceId}`).remove()
+})
+
+exports.onPluginInstanceRemovedFromTopic = functions.database.ref('/v2/topics/{topicId}/plugin_instances/{instanceId}').onDelete(event => {
+    const pluginInstanceId = event.params.instanceId
+    const topicId = event.params.topicId
+    const database = event.data.ref.root
+
+    const removeInstanceToTopic = database
+        .child(`/v2/plugin_instance_to_topic/${pluginInstanceId}/${topicId}`)
+        .remove()
+        .catch(console.err)
+
+    const removeTopicInstanceData = database
+        .child(`/v2/topics_data/${event.params.topicId}/${pluginInstanceId}`)
+        .remove()
+
+    const decrementPluginInstanceCountForTopic = database
+        .child(`/v2/topics_index/${topicId}/plugin_instances_count`)
+        .transaction(current => {
+            return (current || 1) - 1
+        })
+
+    return Promise.all([removeInstanceToTopic, removeTopicInstanceData, decrementPluginInstanceCountForTopic])
 })
