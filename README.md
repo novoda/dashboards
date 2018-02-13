@@ -49,6 +49,3 @@ Sharing humanised, simplified and useful information is the best way our teams c
 [site](https://github.com/novoda/dashboards/tree/master/site) 
 
     The `Admin` and `Viewer` websites written in javascript using react & redux. 
-
-
-
