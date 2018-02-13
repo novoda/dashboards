@@ -23,6 +23,8 @@ Sharing humanised, simplified and useful information is the best way our teams c
 
 ## Project Structure
 
+![dashboard-containers](docs/dashboard-containers.png)
+
 [kiosk](https://github.com/novoda/dashboards/tree/master/kiosk)
 
     A chrome app kiosk for use with `chromebit` or other chromeos devices 
