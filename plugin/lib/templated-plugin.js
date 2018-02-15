@@ -25,7 +25,15 @@ const renderComponent = (component, state) => {
 const inline = (html) => {
     return new Promise((resolve, reject) => {
         new Inliner(utf8.encode(html), { images: false }, (error, outputHtml) => {
-            error ? reject(error) : resolve(utf8.decode(outputHtml))
+            if (error) {
+                reject(error)
+            } else {
+                try {
+                    resolve(utf8.decode(outputHtml))
+                } catch(decodeError) {
+                    reject(decodeError)
+                }
+            }
         })
     })
 }
