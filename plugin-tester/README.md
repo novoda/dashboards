@@ -10,37 +10,35 @@ Install the plugin-tester as a global dependency.
 npm install -g 
 ```
 
-Basic usage
+Bootstrap a new plugin
 
 ```bash
-plugin-tester local ~/my-awesome-plugin
+plugin-tester init "awesome-plugin"
 ```
 
-Typical usage 
+Run a plugin
 
 ```bash
-plugin-tester local ~/my-awesome-plugin --watch --config ~/my-plugin-config.json
+cd awesome-plugin
+npm install
+plugin-tester run
 ```
 
 ## Options
 
 ```bash
-local <path>
+init <name>
 ``` 
 
-The path to a local plugin entry point. The `plugin-tester` expects an entry point which exports a plugin with the following signature:
+Bootstraps a new plugin with the given name.
 
-```javascript
-module.exports.plugin = () => {
-    return (request, response) => {
-        // plugin implementation
-    }
-}
+```bash
+run <optional path>
 ```
 
-The recommended approach is to use the [dashboard-plugin](https://github.com/novoda/dashboards/tree/master/plugin) module and create plugins as independent modules.
+Runs the plugin in a local server at `localhost:5000|port`
 
-Examples can be found [here](https://github.com/novoda/dashboard-plugins)
+The path is optional, if not supplied then the current directory is used. 
 
 ```bash
 -p --port
@@ -58,7 +56,7 @@ Enables watching the plugin module for changes and automatically requerying the 
 -c <path> --config
 ```
 
-The path to a JSON configuration which will be used to query the plugin with.
+The path to a JSON configuration which will be used to query the plugin with. If the config path is not supplied the `plugin-tester` will attempt to find a `config.json` in the plugin directory.
 
 The JSON must be in the following format: 
 
