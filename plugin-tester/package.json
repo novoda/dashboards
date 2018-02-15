@@ -12,6 +12,8 @@
     "chokidar": "^2.0.0",
     "commander": "^2.13.0",
     "express": "^4.16.2",
+    "glob": "^7.1.2",
+    "mustache": "^2.3.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
     "socket.io": "^2.0.4"

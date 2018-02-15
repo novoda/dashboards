@@ -3,12 +3,12 @@
 const chokidar = require('chokidar');
 const Server = require('./server')
 const runnerCreator = require('./runner')
+const template = require('./template')
 const path = require('path')
 
-const program = require('commander')
+const program = require('commander').version('0.0.1')
 
-program.version('0.0.1')
-    .command('local <path>')
+program.command('local <path>')
     .description('Execute a given plugin module')
     .option('-w, --watch', 'Watch the source directory for changes')
     .option('-p --port', 'Optional local server port. Default 5000')
@@ -25,6 +25,13 @@ program.version('0.0.1')
                 .watch(absolutePath, { ignored: /(^|[\/\\])\../ })
                 .on('change', pluginRunner)
         }
+    })
+
+
+program.command('init <name>')
+    .description('Create an inital barebone plugin')
+    .action(name => {
+        template.createTemplate(name)
     })
 
 program.parse(process.argv)
