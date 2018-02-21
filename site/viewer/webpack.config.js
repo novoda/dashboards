@@ -24,13 +24,10 @@ module.exports = {
         publicPath: '/',
         filename: 'bundle.js',
     },
-    target: 'web',
     resolve: {
         extensions: ['.js', '.jsx'],
-        // Fix webpack's default behavior to not load packages with jsnext:main module
-        // https://github.com/Microsoft/TypeScript/issues/11677
-        mainFields: ['main']
     },
+    target: 'web',
     module: {
         loaders: [
             // .ts, .tsx
@@ -115,13 +112,5 @@ module.exports = {
             warnings: false
         }
         ,
-    }
-    ,
-    node: {
-        // workaround for webpack-dev-server issue
-        // https://github.com/webpack/webpack-dev-server/issues/60#issuecomment-103411179
-        fs: 'empty',
-        net:
-        'empty'
     }
 }
