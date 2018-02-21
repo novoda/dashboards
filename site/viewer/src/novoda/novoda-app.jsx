@@ -10,6 +10,7 @@ export class NovodaApp extends React.Component {
         super(props)
         this.state = {
             devices: [],
+            topics: [],
             pluginInstances: [],
             hasAuthed: false,
             selection: null
@@ -23,6 +24,7 @@ export class NovodaApp extends React.Component {
             onSignIn={this._signIn.bind(this)}
             onSelect={this._selectId.bind(this)}
             devices={this.state.devices}
+            topics={this.state.topics}
             pluginInstances={this.state.pluginInstances}
         />
     }
@@ -43,6 +45,7 @@ export class NovodaApp extends React.Component {
                             }
                         })
                     })
+
                 const readPluginInstances = db.ref('/v2/plugin_instances')
                     .once('value')
                     .then(snapshot => {
@@ -61,11 +64,26 @@ export class NovodaApp extends React.Component {
                         }, [])
                     })
 
-                Promise.all([readDevices, readPluginInstances])
+                const readTopics = db.ref(`/v2/topics/`)
+                    .once('value')
+                    .then(snapshot => {
+                        const value = snapshot.val()
+                        return Object.keys(value).map(key => {
+                            const topic = value[key]
+                            return {
+                                id: key,
+                                name: topic.name
+                            }
+                        })
+                    })
+                console.log("Foo created promise")
+                Promise.all([readDevices, readTopics, readPluginInstances])
                     .then(result => {
+                        console.log("Foo, got result", result)
                         this.setState({
                             devices: result[0],
-                            pluginInstances: result[1],
+                            topics: result[1],
+                            pluginInstances: result[2],
                             hasAuthed: true
                         })
                     })
