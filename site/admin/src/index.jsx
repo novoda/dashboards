@@ -13,6 +13,7 @@ import { PluginComponent } from './plugin/plugin-component'
 import { PluginInstanceComponent } from './plugin-instance/plugin-instance-component'
 import { TopicComponent } from './topic/topic-component'
 import { DeviceComponent } from './device/device-component'
+import { KioskComponent } from './kiosk/kiosk-component'
 
 firebase.initializeApp(config);
 injectTapEventPlugin();
@@ -34,8 +35,10 @@ class App extends React.Component {
                     <MuiThemeProvider>
                         <BrowserRouter>
                             <Switch>
+                                <Route exact path="/" component={KioskComponent} />
+                                <Route exact path="/kiosk" component={KioskComponent} />
                                 <Route exact path="/admin/" component={HomeComponent} />
-                                <Route path="/admin/plugins/add" render={(props) => <PluginComponent type='add' {...props} />} />                                
+                                <Route path="/admin/plugins/add" render={(props) => <PluginComponent type='add' {...props} />} />
                                 <Route path="/admin/plugins/:pluginId/add" render={(props) => <PluginInstanceComponent type='add' {...props} />} />
                                 <Route path="/admin/plugins/:pluginId/:instanceId" render={(props) => <PluginInstanceComponent type='edit' {...props} />} />
                                 <Route path="/admin/plugins/:pluginId" render={(props) => <PluginComponent type='edit' {...props} />} />
