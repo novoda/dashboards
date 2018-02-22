@@ -24,7 +24,7 @@ module.exports = {
     },
     output: {
         path: outPath,
-        publicPath: '/admin',
+        publicPath: '/',
         filename: 'bundle.js',
     },
     resolve: {
@@ -111,7 +111,7 @@ module.exports = {
             warnings: false
         },
         historyApiFallback: {
-            index: 'admin/index.html'
+            index: 'index.html'
         }
     }
 }
