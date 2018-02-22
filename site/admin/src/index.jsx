@@ -53,7 +53,17 @@ class App extends React.Component {
             )
         } else {
             return (
-                <button onClick={this._onSignInClicked.bind(this)}> Sign in</button>
+                <Provider store={store}>
+                    <MuiThemeProvider>
+                        <BrowserRouter>
+                            <Switch>
+                                <Route exact path="/" component={KioskComponent} />
+                                <Route exact path="/kiosk" component={KioskComponent} />
+                                <Route path="/*" component={AuthComponent} />
+                            </Switch>
+                        </BrowserRouter>
+                    </MuiThemeProvider>
+                </Provider>
             )
         }
     }
@@ -61,15 +71,22 @@ class App extends React.Component {
     componentDidMount() {
         firebase.auth().onAuthStateChanged(user => {
             this.setState({
-                isAuthed: Boolean(user)
+                isAuthed: Boolean(user) && !user.isAnonymous
             })
         })
     }
 
-    _onSignInClicked() {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider)
-    }
+}
+
+const onSignInClicked = () => () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider)
+}
+
+const AuthComponent = ({}) => {
+    return (
+        <button onClick={onSignInClicked()}> Sign in</button>
+    )
 }
 
 ReactDOM.render(
