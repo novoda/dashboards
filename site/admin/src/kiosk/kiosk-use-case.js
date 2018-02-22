@@ -5,7 +5,7 @@ export const watchAnonymousStateChange = (dispatch, auth) => () => {
         if (user) {
             dispatch(Actions.onAnonymousDeviceId(user.uid))
         } else {
-            firebase.auth()
+            auth
                 .signInAnonymously()
                 .catch(console.log)
         }
