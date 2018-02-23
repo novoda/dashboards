@@ -57,7 +57,11 @@ module.exports = class HtmlRepository {
                     .filter(file => file.metadata.metadata.expires < Date.now())
                     .map(file => {
                         console.log(`delete: ${file.name}`)
-                        return file.delete()
+                        return file
+                            .delete()
+                            .catch(err => {
+                                console.warn('Failed to delete file', file.name, err)
+                            })
                     })
                 return Promise.all(deleteFiles)
             })
