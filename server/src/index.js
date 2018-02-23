@@ -159,6 +159,8 @@ exports.onPluginInstancesDataUpdated = functions.database.ref('/v2/plugin_instan
                     .set(updatedHtml)
             })
             return Promise.all(updatedHtml)
+        }).catch(err => {
+            console.error('Failed to update instance', pluginInstanceId, err)
         })
 })
 
