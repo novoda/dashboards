@@ -11,6 +11,7 @@
     "body-parser": "^1.18.2",
     "chokidar": "^2.0.0",
     "commander": "^2.13.0",
+    "decache": "^4.4.0",
     "express": "^4.16.2",
     "glob": "^7.1.2",
     "mustache": "^2.3.0",

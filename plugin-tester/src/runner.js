@@ -1,4 +1,5 @@
 const http = require('request-promise-native')
+const decache = require('decache')
 
 const createRequestBody = (port, pluginConfig) => {
     return {
@@ -19,6 +20,7 @@ const localPlugin = (localPath, query) => () => {
             }
         }
     }
+    decache(localPath);
     return require(localPath).plugin()(request, response)
 }
 
