@@ -10,11 +10,12 @@ module.exports = (database, htmlRepository) => {
                     const refreshedUrls = Object.keys(instancesData)
                         .map(key => {
                             const currentUrl = instancesData[key]
-                            return htmlRepository.refreshUrl(currentUrl)
-                            .then(refreshedUrl => {
-                                return database.child(`/v2/plugin_instances_data/${key}`)
-                                    .set(refreshedUrl)
-                            })
+                            return htmlRepository
+                                .refreshUrl(currentUrl)
+                                .then(refreshedUrl => {
+                                    return database.child(`/v2/plugin_instances_data/${key}`)
+                                        .set(refreshedUrl)
+                                }).catch(console.err)
                         })
                     return Promise.all(refreshedUrls)
                 })
