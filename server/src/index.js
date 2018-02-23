@@ -68,7 +68,7 @@ exports.onTopicCurrentIndex = functions.database.ref('/v2/topics_index/{topicId}
     return database
         .child(`/v2/topic_to_devices/${topicId}`)
         .once('value')
-        .then(snapshot => snapshot.val())
+        .then(readNonEmptySnapshot)
         .then(topicToDevices => {
             return Object.keys(topicToDevices)
         })
@@ -77,6 +77,9 @@ exports.onTopicCurrentIndex = functions.database.ref('/v2/topics_index/{topicId}
                 return pushHtmlToDeviceForTopic(database, deviceId, topicId, currentIndex)
             })
             return Promise.all(pushHtmlToDevice)
+        })
+        .catch(err => {
+            console.log('Failed to push topic html to device', topicId, err)
         })
 })
 
@@ -146,8 +149,8 @@ exports.onPluginInstancesDataUpdated = functions.database.ref('/v2/plugin_instan
 
     return database.child(`/v2/plugin_instance_to_topic/${pluginInstanceId}`).once('value')
         .then(snapshot => snapshot.val())
+        .then(readNonEmptySnapshot)
         .then(instance => {
-            if (!instance) return Promise.reject('data is empty')
             return Object.keys(instance)
         })
         .then(topicIds => {
@@ -291,3 +294,8 @@ exports.onPluginInstanceRemovedFromTopic = functions.database.ref('/v2/topics/{t
 
     return Promise.all([removeInstanceToTopic, removeTopicInstanceData, decrementPluginInstanceCountForTopic])
 })
+
+const readNonEmptySnapshot = (snapshot) => {
+    const value = snapshot.val()
+    return value ? Promise.resolve(value) : Promise.reject('snapshot is empty')
+}
