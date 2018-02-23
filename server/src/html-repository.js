@@ -38,6 +38,9 @@ module.exports = class HtmlRepository {
         const file = this.bucket.file(filePath)
         return file.setMetadata({ metadata: { expires: expiryTime } })
             .then(() => this._generateSignedUrl(file, expiryTime))
+            .catch(err => {
+                console.log('Failed to refresh URL', filePath, err)
+            })
     }
 
     _generateSignedUrl(file, expiryTime) {
