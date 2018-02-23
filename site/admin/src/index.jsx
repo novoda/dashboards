@@ -15,6 +15,9 @@ import { TopicComponent } from './topic/topic-component'
 import { DeviceComponent } from './device/device-component'
 import { KioskComponent } from './kiosk/kiosk-component'
 
+document.body.style.padding = 0;
+document.body.style.margin = 0;
+
 firebase.initializeApp(config);
 injectTapEventPlugin();
 const store = create();
