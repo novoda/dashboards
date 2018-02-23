@@ -23,8 +23,12 @@ module.exports = class HtmlRepository {
             public: false
         }
 
-        return file.save(html, fileOptions)
+        return file
+            .save(html, fileOptions)
             .then(() => this._generateSignedUrl(file, expiryTime))
+            .catch(err => {
+                console.error('Failed to store plugin html', pluginInstanceId, err)
+            })
     }
 
     refreshUrl(url) {
