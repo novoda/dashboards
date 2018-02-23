@@ -14,6 +14,7 @@ import { PluginInstanceComponent } from './plugin-instance/plugin-instance-compo
 import { TopicComponent } from './topic/topic-component'
 import { DeviceComponent } from './device/device-component'
 import { KioskComponent } from './kiosk/kiosk-component'
+import { LandingComponent } from './landing/landing-component'
 
 document.body.style.padding = 0;
 document.body.style.margin = 0;
@@ -40,7 +41,8 @@ class App extends React.Component {
                             <Switch>
                                 <Route exact path="/" component={KioskComponent} />
                                 <Route exact path="/kiosk" component={KioskComponent} />
-                                <Route exact path="/admin/" component={HomeComponent} />
+                                <Route exact path="/landing" component={LandingComponent} />
+                                <Route exact path="/admin" component={HomeComponent} />
                                 <Route path="/admin/plugins/add" render={(props) => <PluginComponent type='add' {...props} />} />
                                 <Route path="/admin/plugins/:pluginId/add" render={(props) => <PluginInstanceComponent type='add' {...props} />} />
                                 <Route path="/admin/plugins/:pluginId/:instanceId" render={(props) => <PluginInstanceComponent type='edit' {...props} />} />

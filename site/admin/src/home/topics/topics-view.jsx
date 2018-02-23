@@ -13,7 +13,7 @@ export const TopicsView = ({ loading, topics }) => {
     if (loading) {
         return (
             <h1>Loading!</h1>
-        );
+        )
     } else {
         return (
             <div>
