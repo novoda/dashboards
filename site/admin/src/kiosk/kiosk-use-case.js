@@ -1,4 +1,5 @@
 import * as Actions from './kiosk-actions'
+import { watchDeviceData } from '../dashboard-repository'
 
 export const watchAnonymousStateChange = (dispatch, auth) => () => {
     return auth.onAuthStateChanged(user => {
@@ -12,18 +13,13 @@ export const watchAnonymousStateChange = (dispatch, auth) => () => {
     })
 }
 
-export const watchDeviceContent = (dispatch, database) => (deviceId) => {
-    return database.ref(`/v2/devices_data/${deviceId}`)
-        .on('value', snapshot => {
-            if (!snapshot.exists()) {
-                return
-            }
-            const url = snapshot.val()
-            fetch(url)
-                .then(response => response.text())
-                .then(html => {
-                    dispatch(Actions.onDeviceContent(html))
-                })
+export const watchDeviceContent = (dispatch) => (deviceId) => {
+    return watchDeviceData(deviceId, (url) => {
+        fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            dispatch(Actions.onDeviceContent(html))
         })
+    })
 }
 

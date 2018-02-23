@@ -24,3 +24,11 @@ export const remove = (path) => () => {
         .remove()
 }
 
+export const watch = (path) => (callback) => {
+    return firebase.database().ref(`v2/${path}`)
+        .on('value', snapshot => {
+            if (!snapshot.exists()) return
+            callback(snapshot.val())
+        })
+}
+
