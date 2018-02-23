@@ -147,6 +147,7 @@ exports.onPluginInstancesDataUpdated = functions.database.ref('/v2/plugin_instan
     return database.child(`/v2/plugin_instance_to_topic/${pluginInstanceId}`).once('value')
         .then(snapshot => snapshot.val())
         .then(instance => {
+            if (!instance) return Promise.reject('data is empty')
             return Object.keys(instance)
         })
         .then(topicIds => {
@@ -159,7 +160,8 @@ exports.onPluginInstancesDataUpdated = functions.database.ref('/v2/plugin_instan
                     .set(updatedHtml)
             })
             return Promise.all(updatedHtml)
-        }).catch(err => {
+        })
+        .catch(err => {
             console.error('Failed to update instance', pluginInstanceId, err)
         })
 })
