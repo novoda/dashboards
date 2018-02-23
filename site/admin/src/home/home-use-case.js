@@ -28,6 +28,11 @@ export const deleteDevice = (dispatch) => async (device) => {
     await fetchDevices(dispatch)()
 }
 
+export const deleteTopic = (dispatch) => async (topic) => {
+    await removeTopic(topic.id)
+    await fetchTopics(dispatch)()
+}
+
 export const deletePlugin = (dispatch) => async (plugin) => {
     await removePlugin(plugin.id)
     await fetchPlugins(dispatch)()

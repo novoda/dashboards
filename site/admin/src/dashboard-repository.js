@@ -193,3 +193,7 @@ export const removeDevice = (deviceId) => {
 export const removePlugin = (pluginId) => {
     return firebase.remove(`plugins/${pluginId}`)()
 }
+
+export const removeTopic = (topicId) => {
+    return firebase.remove(`topics/${topicId}`)()
+}
