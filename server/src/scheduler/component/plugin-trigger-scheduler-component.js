@@ -2,6 +2,7 @@ module.exports = (projectId, http, database) => {
     return {
         tickRate: 1,
         tick: () => {
+            console.log('running plugin trigger')
             return database.child('/v2/plugin_instances')
                 .once('value')
                 .then(snapshot => snapshot.val())

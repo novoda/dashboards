@@ -2,6 +2,7 @@ module.exports = (database, htmlRepository) => {
     return {
         tickRate: 3,
         tick: () => {
+            console.log('running html expiry refresher')
             return database.child(`/v2/plugin_instances_data/`)
                 .once('value')
                 .then(snapshot => {

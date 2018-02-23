@@ -2,6 +2,7 @@ module.exports = (database) => {
     return {
         tickRate: 1,
         tick: () => {
+            console.log('running topic index updater')
             return database.child('/v2/topics_index')
                 .once('value')
                 .then(snapshot => snapshot.val())
