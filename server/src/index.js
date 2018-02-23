@@ -148,7 +148,6 @@ exports.onPluginInstancesDataUpdated = functions.database.ref('/v2/plugin_instan
     console.log('instance data updated', pluginInstanceId)
 
     return database.child(`/v2/plugin_instance_to_topic/${pluginInstanceId}`).once('value')
-        .then(snapshot => snapshot.val())
         .then(readNonEmptySnapshot)
         .then(instance => {
             return Object.keys(instance)
