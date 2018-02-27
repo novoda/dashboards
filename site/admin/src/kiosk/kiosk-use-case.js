@@ -16,10 +16,10 @@ export const watchAnonymousStateChange = (dispatch, auth) => () => {
 export const watchDeviceContent = (dispatch) => (deviceId) => {
     return watchDeviceData(deviceId, (url) => {
         fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            dispatch(Actions.onDeviceContent(html))
-        })
+            .then(response => response.text())
+            .then(html => {
+                dispatch(Actions.onDeviceContent(html))
+            })
     })
 }
 

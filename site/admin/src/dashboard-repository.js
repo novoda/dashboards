@@ -198,3 +198,16 @@ export const watchDeviceData = (deviceId, callback) => {
     return firebase.watch(`devices_data/${deviceId}`)(callback)
 }
 
+const watchTopicIndex = (topicId, callback) => {
+    return firebase.watch(`topics_index/${topicId}/current_index`)(callback)
+}
+
+export const watchTopicData = (topicId, callback) => {
+    return watchTopicIndex(topicId, ((index) => {
+        firebase.read(`topics_data/${topicId}`)
+            .then(instances => {
+                const instanceKey = Object.keys(instances)[index]
+                callback(instances[instanceKey].html)
+            })
+    }))   
+}

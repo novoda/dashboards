@@ -25,7 +25,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchLanding: UseCase.fetchLanding(dispatch),
+        fetchLanding: UseCase.fetchLanding(dispatch)
     }
 }
 

@@ -5,17 +5,17 @@ export const KioskView = ({ viewState }) => {
     if (viewState.isProvisioned) {
         return <IframeView html={viewState.html} />
     } else {
-        return <UnprovisionedView deviceId={viewState.deviceId} />
+        return <UnprovisionedView id={viewState.id} />
     }
 }
 
-const UnprovisionedView = ({ deviceId }) => {
+const UnprovisionedView = ({ id }) => {
     return (
         <div className={style.root}>
             <div className={style.logo} >
                 <LogoView />
             </div>
-            <div className={style.text}>{deviceId}</div>
+            <div className={style.text}>{id}</div>
         </div >
     )
 }

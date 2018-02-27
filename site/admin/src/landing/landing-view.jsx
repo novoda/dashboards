@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 export const LandingView = ({ viewState }) => {
     if (viewState.loading) {
@@ -7,7 +8,7 @@ export const LandingView = ({ viewState }) => {
 
     const topicsList = viewState.topics.map(topic => {
         return (
-            <button onClick={() => console.log(topic)}>{topic.name}</button>
+            <Link to={`/topic/${topic.id}`} key={topic.id}><button> {topic.name} </button></Link>
         )
     })
 
