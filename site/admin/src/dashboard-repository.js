@@ -198,6 +198,10 @@ export const watchDeviceData = (deviceId, callback) => {
     return firebase.watch(`devices_data/${deviceId}`)(callback)
 }
 
+export const watchPluginData = (pluginId, callback) => {
+    return firebase.watch(`plugin_instances_data/${pluginId}`)(callback)
+}
+
 const watchTopicIndex = (topicId, callback) => {
     return firebase.watch(`topics_index/${topicId}/current_index`)(callback)
 }
