@@ -25,10 +25,15 @@ export const remove = (path) => () => {
 }
 
 export const watch = (path) => (callback) => {
-    return firebase.database().ref(`v2/${path}`)
-        .on('value', snapshot => {
-            if (!snapshot.exists()) return
-            callback(snapshot.val())
-        })
+    const onData = snapshot => {
+        if (!snapshot.exists()) return
+        callback(snapshot.val())
+    }
+    firebase.database().ref(`v2/${path}`)
+    .on('value', onData)
+    return () => {
+        firebase.database().ref(`v2/${path}`)
+        .off('value', onData)    
+    }
 }
 
