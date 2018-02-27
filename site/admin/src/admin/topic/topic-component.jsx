@@ -50,7 +50,7 @@ class Component extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     const isEditing = ownProps.type === 'edit'
-    const mappedState = { topicView: state.topic, isEditing }
+    const mappedState = { topicView: state.adminTopic, isEditing }
     return isEditing
         ? { ...mappedState, topicId: ownProps.match.params.topicId }
         : mappedState
