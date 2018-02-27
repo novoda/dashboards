@@ -1,16 +1,27 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import { ContentView, AddFabView } from '../admin/common/common-views'
+
+const toContent = (topic) => {
+    return {
+        id: topic.id,
+        title: topic.name,
+        subtitle: topic.id
+    }
+}
 
 export const LandingView = ({ viewState }) => {
     if (viewState.loading) {
-        return <h1>Loading!</h1>
-    }
-
-    const topicsList = viewState.topics.map(topic => {
         return (
-            <Link to={`/topic/${topic.id}`} key={topic.id}><button> {topic.name} </button></Link>
-        )
-    })
-
-    return <div>{topicsList}</div>
+            <h1>Loading!</h1>
+        );
+    } else {
+        return (
+            <div>
+                <ContentView
+                    content={viewState.topics.map(toContent)}
+                    clickThrough="/topic" />
+            </div>
+        );
+    }
 }
