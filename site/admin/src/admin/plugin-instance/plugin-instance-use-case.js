@@ -3,7 +3,7 @@ import {
     readPluginInstance,
     pushPluginInstance,
     setPluginInstance
-} from '../dashboard-repository'
+} from '../../dashboard-repository'
 import * as Actions from './plugin-instance-actions'
 
 export const fetchPlugin = (dispatch) => async (id) => {

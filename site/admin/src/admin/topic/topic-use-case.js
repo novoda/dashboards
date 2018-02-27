@@ -1,4 +1,4 @@
-import { readPluginInstances, pushTopic, setTopic, readTopic } from '../dashboard-repository'
+import { readPluginInstances, pushTopic, setTopic, readTopic } from '../../dashboard-repository'
 import * as Actions from './topic-actions'
 
 export const fetchPluginInstances = (dispatch) => async () => {
