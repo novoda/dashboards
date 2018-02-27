@@ -5,7 +5,11 @@ import { PluginInstanceDetailsComponent as DetailsComponent } from './plugin-ins
 import { PluginViewerComponent as ViewerComponent } from './viewer/plugin-viewer-component'
 
 export class PluginInstanceComponent extends React.Component {
-
+    
+    shouldComponentUpdate() {
+        return false
+    }
+    
     render() {
         const { isEditing, instanceView } = this.props
         return (
