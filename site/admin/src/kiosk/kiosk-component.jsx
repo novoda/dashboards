@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import * as UseCase from './kiosk-use-case'
+import * as Actions from './kiosk-actions'
 import { KioskView } from '../viewer/kiosk-view'
 
 import * as firebase from 'firebase/app'
@@ -18,7 +19,11 @@ class Component extends React.Component {
     }
 
     componentDidMount() {
-        this.unsubscribeFromAuthStateChanges = this.props.startWatchingAnonymousStateChange()
+        if (this.props.forcedId) {            
+            this.props.forceId(this.props.forcedId)            
+        } else {
+            this.unsubscribeFromAuthStateChanges = this.props.startWatchingAnonymousStateChange()
+        }
     }
 
     componentWillUpdate(nextProps) {
@@ -29,7 +34,9 @@ class Component extends React.Component {
     }
 
     componentWillUnmount() {
-        this.unsubscribeFromAuthStateChanges()
+        if (this.unsubscribeFromAuthStateChanges) {
+            this.unsubscribeFromAuthStateChanges()
+        }
         if (this.unsubscribeFromDeviceChanges) {
             this.unsubscribeFromDeviceChanges()
         }
@@ -50,6 +57,7 @@ const mapDispatchToProps = (dispatch) => {
     const auth = firebase.auth()
     const database = firebase.database()
     return {
+        forceId: (forcedId) => dispatch(Actions.onAnonymousDeviceId(forcedId))  ,
         startWatchingAnonymousStateChange: UseCase.watchAnonymousStateChange(dispatch, auth),
         startWatchingDeviceContent: UseCase.watchDeviceContent(dispatch, database)
     }

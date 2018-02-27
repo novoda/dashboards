@@ -29,7 +29,7 @@ class Component extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     const { html } = state.topic
-    const { topicId } = ownProps.match.params 
+    const { topicId } = ownProps.match.params
     return {
         id: topicId,
         isProvisioned: html ? true : false,
