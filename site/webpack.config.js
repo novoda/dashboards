@@ -4,7 +4,7 @@ var path = require('path');
 // variables
 var isProduction = process.argv.indexOf('-p') >= 0;
 var sourcePath = path.join(__dirname, './src');
-var outPath = path.join(__dirname, '../dist/');
+var outPath = path.join(__dirname, './dist');
 
 // plugins
 var HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -16,7 +16,10 @@ module.exports = {
         main: './index.jsx',
         vendor: [
             'react',
-            'react-dom'
+            'react-dom',
+            'react-redux',
+            'react-router',
+            'redux'
         ]
     },
     output: {
@@ -25,7 +28,7 @@ module.exports = {
         filename: 'bundle.js',
     },
     resolve: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js', '.jsx']
     },
     target: 'web',
     module: {
@@ -86,8 +89,7 @@ module.exports = {
             { test: /\.jpg$/, use: 'file-loader' },
         ],
     },
-    plugins:
-    [
+    plugins: [
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
             filename: 'vendor.bundle.js',
@@ -102,15 +104,14 @@ module.exports = {
             template: 'index.html'
         })
     ],
-    devServer:
-    {
+    devServer: {
         contentBase: sourcePath,
-        hot:
-        true,
-        stats:
-        {
+        hot: true,
+        stats: {
             warnings: false
+        },
+        historyApiFallback: {
+            index: 'index.html'
         }
-        ,
     }
 }
