@@ -1,12 +1,25 @@
 import React from 'react'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import * as style from './style.css'
 
 export const KioskView = ({ viewState }) => {
     if (viewState.isProvisioned) {
-        return <IframeView html={viewState.html} />
+        console.log('WTF', 'We got animate')
+        return <Animate><IframeView key={viewState.html} html={viewState.html} /></Animate>
     } else {
         return <UnprovisionedView id={viewState.id} />
     }
+}
+
+const Animate = ({ children }) => {
+    return (
+        <ReactCSSTransitionGroup
+            transitionName="content"
+            transitionEnter={true}
+            transitionLeave={true}>
+            {children}
+        </ReactCSSTransitionGroup>
+    )
 }
 
 const UnprovisionedView = ({ id }) => {
