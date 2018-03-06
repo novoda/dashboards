@@ -22,6 +22,7 @@ class Component extends React.Component {
     }
 
     componentWillUnmount() {
+        this.props.resetTopicContent()
         this.unsubscribe()
     }
 
@@ -40,7 +41,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
     const database = firebase.database()
     return {
-        startWatchingTopicContent: UseCase.watchTopicContent(dispatch, database)
+        startWatchingTopicContent: UseCase.watchTopicContent(dispatch, database),
+        resetTopicContent: UseCase.resetTopicContent(dispatch)
     }
 }
 

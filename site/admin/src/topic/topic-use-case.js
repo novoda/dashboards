@@ -11,3 +11,8 @@ export const watchTopicContent = (dispatch) => (topicId) => {
     })
 }
 
+export const resetTopicContent = (dispatch) => {
+    return () => {
+        dispatch(Actions.onResetTopicContent())
+    }
+}
