@@ -8,5 +8,8 @@ const initialState = {
 export const plugin = handleActions({
     [Actions.ON_PLUGIN_CONTENT]: (state, action) => {
         return { ...state, html: action.payload }
+    },
+    [Actions.ON_RESET_PLUGIN_CONTENT]: (state, action) => {
+        return { ...state, html: undefined }
     }
 }, initialState)

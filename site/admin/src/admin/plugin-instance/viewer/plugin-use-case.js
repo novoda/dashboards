@@ -11,3 +11,8 @@ export const watchPluginContent = (dispatch) => (pluginId) => {
     })
 }
 
+export const resetPluginContent = (dispatch) => {
+    return (url) => {
+        dispatch(Actions.onResetPluginContent())
+    }
+}
