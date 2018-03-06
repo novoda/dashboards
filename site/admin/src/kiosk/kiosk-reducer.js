@@ -12,5 +12,8 @@ export const kiosk = handleActions({
     },
     [Actions.ON_DEVICE_CONTENT]: (state, action) => {
         return { ...state, html: action.payload }
+    },
+    [Actions.ON_RESET_DEVICE_CONTENT]: (state, action) => {
+        return { ...state, html: undefined }
     }
 }, initialState)

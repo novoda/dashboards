@@ -22,4 +22,8 @@ export const watchDeviceContent = (dispatch) => (deviceId) => {
             })
     })
 }
-
+export const resetDeviceContent = (dispatch) => {
+    return () => {
+        dispatch(Actions.onResetDeviceContent())
+    }
+}

@@ -34,6 +34,7 @@ class Component extends React.Component {
     }
 
     componentWillUnmount() {
+        this.props.resetDeviceContent()
         if (this.unsubscribeFromAuthStateChanges) {
             this.unsubscribeFromAuthStateChanges()
         }
@@ -59,7 +60,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         forceId: (forcedId) => dispatch(Actions.onAnonymousDeviceId(forcedId))  ,
         startWatchingAnonymousStateChange: UseCase.watchAnonymousStateChange(dispatch, auth),
-        startWatchingDeviceContent: UseCase.watchDeviceContent(dispatch, database)
+        startWatchingDeviceContent: UseCase.watchDeviceContent(dispatch, database),
+        resetDeviceContent: UseCase.resetDeviceContent(dispatch)
     }
 }
 
