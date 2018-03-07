@@ -2,7 +2,7 @@ import React from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import * as style from './style.css'
 
-export const KioskView = ({ viewState }) => {
+export const ContentView = ({ viewState }) => {
     if (viewState.isProvisioned) {
         console.log('WTF', 'We got animate')
         return <Animate><IframeView key={viewState.html} html={viewState.html} /></Animate>

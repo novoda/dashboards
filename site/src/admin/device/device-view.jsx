@@ -7,7 +7,7 @@ import {
     MenuItem
 } from 'material-ui'
 import { NavigationArrowBack } from 'material-ui/svg-icons'
-import { AppBarView } from '../common/common-views'
+import { AppBarView } from '../../common/common-views'
 
 export const DeviceView = ({ title, submitLabel, device, onBack, onDeviceNameChanged, onDeviceIdChanged, onTopicChanged, onSubmit }) => {
     return (

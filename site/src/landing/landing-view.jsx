@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { ContentView, AddFabView } from '../admin/common/common-views'
+import { ContentView, AddFabView } from '../common/common-views'
 
 const toContent = (topic) => {
     return {

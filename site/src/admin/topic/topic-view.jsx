@@ -1,6 +1,6 @@
 import React from 'react'
 import { RaisedButton, TextField, Toggle } from 'material-ui'
-import { AppBarView } from '../common/common-views'
+import { AppBarView } from '../../common/common-views'
 
 export const TopicView = ({ title, submitLabel, pluginInstances, name, onBack, onNameChanged, onSubmit, onInstanceToggle }) => {
     return (

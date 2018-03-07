@@ -1,5 +1,5 @@
 import React from 'react'
-import { ContentView, AddFabView, AppBarView } from '../common/common-views'
+import { ContentView, AddFabView, AppBarView } from '../../common/common-views'
 import { RaisedButton, TextField } from 'material-ui'
 
 const toContent = (instance) => {

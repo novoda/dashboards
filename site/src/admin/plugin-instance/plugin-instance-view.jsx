@@ -1,6 +1,6 @@
 import React from 'react'
 import { RaisedButton, TextField } from 'material-ui'
-import { AppBarView } from '../common/common-views'
+import { AppBarView } from '../../common/common-views'
 
 export const PluginInstanceView = ({ title, submitLabel, instanceView, onBack, onConfigurationChanged, onNameChanged, onSubmit }) => {
     return (

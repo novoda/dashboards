@@ -1,5 +1,5 @@
 import React from 'react';
-import { ContentView, AddFabView } from '../../common/common-views'
+import { ContentView, AddFabView } from '../../../common/common-views'
 
 const toContent = (topic) => {
     return {

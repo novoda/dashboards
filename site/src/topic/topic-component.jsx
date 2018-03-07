@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import * as UseCase from './topic-use-case'
-import { KioskView } from '../viewer/kiosk-view'
+import { ContentView } from '../common/viewer/content-view'
 
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
@@ -11,7 +11,7 @@ class Component extends React.Component {
 
     render() {
         if (this.props.id) {
-            return <KioskView viewState={this.props} />
+            return <ContentView viewState={this.props} />
         } else {
             return null
         }
