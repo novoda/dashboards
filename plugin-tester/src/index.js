@@ -49,6 +49,9 @@ const runPlugin = (pluginPath, options) => {
     if (options.watch) {
         const watch = createWatcher(pluginRunner)
         watch(pluginPath)
+        if (options.config) {
+            watch(resolveConfigPath(options.config))
+        }
     }
 }
 
