@@ -15,12 +15,16 @@ program.command('init <name>')
         template.createTemplate(name)
     })
 
-const readConfig = (pluginPath, options) => {
+const readJson = path => {
+    return JSON.parse(fs.readFileSync(path))
+}
+
+const readConfig = (pluginPath, options) => () => {
     const configPath = path.join(pluginPath, 'config.json')
     if (options.config) {
-        return require(path.resolve(options.config))
+        return readJson(resolveConfigPath(options.config))
     } else if (fs.existsSync(configPath)) {
-        return require(configPath)
+        return readJson(configPath)
     } else {
         return {}
     }
