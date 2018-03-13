@@ -15,27 +15,43 @@ program.command('init <name>')
         template.createTemplate(name)
     })
 
-const readConfig = (pluginPath, options) => {
+const resolveConfigPath = config => {
+    return path.resolve(config)
+}
+
+const readJson = path => {
+    return JSON.parse(fs.readFileSync(path))
+}
+
+const createConfigReader = (pluginPath, options) => () => {
     const configPath = path.join(pluginPath, 'config.json')
     if (options.config) {
-        return require(path.resolve(options.config))
+        return readJson(resolveConfigPath(options.config))
     } else if (fs.existsSync(configPath)) {
-        return require(configPath)
+        return readJson(configPath)
     } else {
         return {}
     }
 }
 
+const createWatcher = onChange => location => {
+    chokidar
+        .watch(location, { ignored: /(^|[\/\\])\../ })
+        .on('change', onChange)
+}
+
 const runPlugin = (pluginPath, options) => {
     const port = options.port || 5000
-    const config = readConfig(pluginPath, options)
-    const pluginRunner = runnerCreator.local(pluginPath, port, config)
+    const configReader = createConfigReader(pluginPath, options)
+    const pluginRunner = runnerCreator.local(pluginPath, port, configReader)
     const server = new Server(port, pluginRunner)
     server.start()
     if (options.watch) {
-        chokidar
-            .watch(pluginPath, { ignored: /(^|[\/\\])\../ })
-            .on('change', pluginRunner)
+        const watch = createWatcher(pluginRunner)
+        watch(pluginPath)
+        if (options.config) {
+            watch(resolveConfigPath(options.config))
+        }
     }
 }
 
