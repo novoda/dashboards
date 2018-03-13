@@ -18,24 +18,33 @@ program.command('init <name>')
 const readConfig = (pluginPath, options) => {
     const configPath = path.join(pluginPath, 'config.json')
     if (options.config) {
-        return require(path.resolve(options.config))
+        delete require.cache[path.resolve(options.config)]
+        return require(path.resolve(options.config))        
     } else if (fs.existsSync(configPath)) {
+        delete require.cache[configPath]
         return require(configPath)
     } else {
         return {}
     }
 }
 
-const runPlugin = (pluginPath, options) => {
+const createPluginRunner = (pluginPath, options) => {
     const port = options.port || 5000
     const config = readConfig(pluginPath, options)
-    const pluginRunner = runnerCreator.local(pluginPath, port, config)
+    return runnerCreator.local(pluginPath, port, config) 
+}
+
+const runPlugin = (pluginPath, options) => {
+    const port = options.port || 5000
+    const pluginRunner = createPluginRunner(pluginPath, options)
     const server = new Server(port, pluginRunner)
     server.start()
     if (options.watch) {
         chokidar
             .watch(pluginPath, { ignored: /(^|[\/\\])\../ })
-            .on('change', pluginRunner)
+            .on('change', () => {
+                createPluginRunner(pluginPath, options)()
+            })
     }
 }
 
