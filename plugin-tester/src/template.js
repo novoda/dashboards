@@ -24,12 +24,15 @@ const template = (templatePath, viewState, file) => {
 }
 
 const createTemplate = name => {
+    console.log("Creating plugin... ", name);
+
     const viewState = {
         pluginName: name,
         pluginId: name.toLowerCase().replace(/\s+/g, '-')
     }
     const pluginPath = path.join(process.cwd(), name)
     fs.mkdirSync(pluginPath)
+    console.log("> mkdir ", pluginPath);
     const templatePath = path.join(__dirname, '../template')
     const options = {
         cwd: templatePath,
@@ -41,7 +44,9 @@ const createTemplate = name => {
         const templatedFilePath = path.join(pluginPath, file)
         ensureDirectoryExistence(templatedFilePath)
         fs.writeFileSync(templatedFilePath, templatedContent)
+        console.log("> created file ", templatedFilePath);
     })
+    console.log("Creating plugin... done");
 }
 
 

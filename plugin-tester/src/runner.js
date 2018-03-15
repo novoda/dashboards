@@ -1,39 +1,28 @@
 const http = require('request-promise-native')
 const decache = require('decache')
 
-const createRequestBody = (port, pluginConfig) => {
-    return {
-        type: 'query',
-        callbackUrl: `http://localhost:${port}/callback`,
-        configuration: pluginConfig
-    }
-}
-
-const localPlugin = (localPath, query) => () => {
-    const request = {
-        body: query
-    }
-    const response = {
-        status: () => {
-            return {
-                send: (message) => { }
-            }
+const ignoredResponse = {
+    status: () => {
+        return {
+            send: (message) => { }
         }
     }
-    decache(localPath);
-    return require(localPath).plugin()(request, response)
 }
 
-const hostedPlugin = (url, query) => () => {
-    const request = {
-        url: url,
-        body: query,
-        json: true
+module.exports.local = (path, port, configReader) => () => {
+    try { 
+        const config = configReader()
+        const request = {
+            body: {
+                type: 'query',
+                callbackUrl: `http://localhost:${port}/callback`,
+                configuration: config
+            }
+        }
+        decache(path)
+        require(path).plugin()(request, ignoredResponse)
+        console.log("Deployed plugin successfully\n")
+    } catch (error) {
+        console.log("Compile error:\n", error, "\n")
     }
-    return http.post(request)
-}
-
-module.exports.local = (path, port, pluginConfig) => {
-    const query = createRequestBody(port, pluginConfig)
-    return localPlugin(path, query)
 }

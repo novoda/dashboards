@@ -4,7 +4,7 @@
   "description": "Dashboard app launcher",
   "author": "Novoda",
   "manifest_version": 2,
-  "version": "1.1.1",
+  "version": "1.1.2",
   "permissions": [
     "webview",
     "power",
