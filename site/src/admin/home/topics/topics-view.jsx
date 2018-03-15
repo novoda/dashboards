@@ -9,7 +9,7 @@ const toContent = (topic) => {
     }
 }
 
-export const TopicsView = ({ loading, topics }) => {
+export const TopicsView = ({ loading, topics, onDelete }) => {
     if (loading) {
         return (
             <h1>Loading!</h1>
@@ -19,7 +19,8 @@ export const TopicsView = ({ loading, topics }) => {
             <div>
                 <ContentView
                     content={topics.map(toContent)}
-                    clickThrough='/admin/topics' />
+                    clickThrough='/admin/topics'
+                    onDelete={onDelete} />
                 <AddFabView link='/admin/topics/add' />
             </div>
         );

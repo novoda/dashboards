@@ -284,14 +284,38 @@ exports.onPluginInstanceRemovedFromTopic = functions.database.ref('/v2/topics/{t
     const removeTopicInstanceData = database
         .child(`/v2/topics_data/${event.params.topicId}/${pluginInstanceId}`)
         .remove()
+        .catch(console.err)
 
     const decrementPluginInstanceCountForTopic = database
         .child(`/v2/topics_index/${topicId}/plugin_instances_count`)
         .transaction(current => {
             return (current || 1) - 1
         })
+        .catch(console.err)
 
     return Promise.all([removeInstanceToTopic, removeTopicInstanceData, decrementPluginInstanceCountForTopic])
+})
+
+exports.onTopicDeleted = functions.database.ref('v2/topics/{topicId}').onDelete(event => {
+    const database = event.data.ref.root
+    const topicId = event.params.topicId
+
+    const removeTopicIndex = database
+        .child(`/v2/topics_index/${topicId}`)
+        .remove()
+        .catch(console.err)
+
+    const removeTopicToDevices = database
+        .child(`/v2/topic_to_devices/${topicId}`)
+        .remove()
+        .catch(console.err)
+
+    const removeTopicsData = database
+        .child(`/v2/topics_data/${topicId}`)
+        .remove()
+        .catch(console.err)
+
+    return Promise.all([removeTopicIndex, removeTopicToDevices, removeTopicsData])
 })
 
 const readNonEmptySnapshot = (snapshot) => {

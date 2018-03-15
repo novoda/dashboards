@@ -194,6 +194,9 @@ export const removePlugin = (pluginId) => {
     return firebase.remove(`plugins/${pluginId}`)()
 }
 
+export const removeTopic = (topicId) => {
+    return firebase.remove(`topics/${topicId}`)()
+}
 export const watchDeviceData = (deviceId, callback) => {
     return firebase.watch(`devices_data/${deviceId}`)(callback)
 }

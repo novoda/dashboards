@@ -13,6 +13,7 @@ class Component extends React.Component {
                 topicsView={this.props.topicsView}
                 devicesView={this.props.devicesView}
                 onDeletePlugin={this._onDeletePlugin.bind(this)}
+                onDeleteTopic={this._onDeleteTopic.bind(this)}
                 onDeleteDevice={this._onDeleteDevice.bind(this)}
             />
         )
@@ -26,6 +27,10 @@ class Component extends React.Component {
 
     _onDeleteDevice(device) {
         this.props.deleteDevice(device)
+    }
+
+    _onDeleteTopic(topic) {
+        this.props.deleteTopic(topic)        
     }
 
     _onDeletePlugin(plugin) {
@@ -49,6 +54,7 @@ const mapDispatchToProps = (dispatch) => {
         fetchTopics: UseCase.fetchTopics(dispatch),
         selectTab: UseCase.selectTab(dispatch),
         deleteDevice: UseCase.deleteDevice(dispatch),
+        deleteTopic: UseCase.deleteTopic(dispatch),
         deletePlugin: UseCase.deletePlugin(dispatch)
     }
 }
