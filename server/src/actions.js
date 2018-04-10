@@ -128,17 +128,17 @@ module.exports = class Actions {
         const removeTopicIndex = this.database
             .ref(`/v2/topics_index/${topicId}`)
             .remove()
-            .catch(console.err)
+            .catch(console.error)
 
         const removeTopicToDevices = this.database
             .ref(`/v2/topic_to_devices/${topicId}`)
             .remove()
-            .catch(console.err)
+            .catch(console.error)
 
         const removeTopicsData = this.database
             .ref(`/v2/topics_data/${topicId}`)
             .remove()
-            .catch(console.err)
+            .catch(console.error)
         return Promise.all([removeTopicIndex, removeTopicToDevices, removeTopicsData])
     }
 
@@ -146,19 +146,19 @@ module.exports = class Actions {
         const removeInstanceToTopic = this.database
             .ref(`/v2/plugin_instance_to_topic/${pluginInstanceId}/${topicId}`)
             .remove()
-            .catch(console.err)
+            .catch(console.error)
 
         const removeTopicInstanceData = this.database
             .ref(`/v2/topics_data/${topicId}/${pluginInstanceId}`)
             .remove()
-            .catch(console.err)
+            .catch(console.error)
 
         const decrementPluginInstanceCountForTopic = this.database
             .ref(`/v2/topics_index/${topicId}/plugin_instances_count`)
             .transaction(current => {
                 return (current || 1) - 1
             })
-            .catch(console.err)
+            .catch(console.error)
 
         return Promise.all([removeInstanceToTopic, removeTopicInstanceData, decrementPluginInstanceCountForTopic])
     }
