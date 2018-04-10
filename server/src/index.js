@@ -4,77 +4,46 @@ const http = require('request-promise-native')
 const HtmlRepository = require('./html-repository')
 const Scheduler = require('./scheduler/scheduler')
 const cors = require('cors')({ origin: true });
-
+const Actions = require('./actions')
 admin.initializeApp(functions.config().firebase);
 
 const bucket = admin.storage().bucket()
 const htmlRepository = new HtmlRepository(bucket)
 
+const actions = new Actions(admin.database())
+
 exports.onPluginInstanceWrite = functions.database.ref('/v2/plugin_instances/{pluginId}/{pluginInstanceId}/').onWrite(event => {
     const payload = event.data.val()
     const pluginInstanceId = event.params.pluginInstanceId
-    const database = event.data.ref.root
-    return database.child(`/v2/plugin_instances_named/${pluginInstanceId}`).set(payload.name)
+    return actions.applyPluginInstanceName(pluginInstanceId, payload.name)
 })
 
 exports.onNewTopic = functions.database.ref('/v2/topics/{topicId}').onCreate(event => {
-    const database = event.data.ref.root
     const topicId = event.params.topicId
-    return database.child(`/v2/topics_index/${topicId}/current_index`).set(0)
+    return actions.applyInitialIndexToTopic(topicId)
 })
 
 exports.onPluginInstanceAddedToTopic = functions.database.ref('/v2/topics/{topicId}/plugin_instances/{instanceId}').onCreate(event => {
     const pluginInstanceId = event.params.instanceId
     const topicId = event.params.topicId
-    const database = event.data.ref.root
-
-    const pluginHtml = database
-        .child(`/v2/plugin_instances_data/${pluginInstanceId}`)
-        .once('value')
-        .then(snapshot => snapshot.val())
-
-    const pluginInstanceName = database
-        .child(`/v2/plugin_instances_named/${pluginInstanceId}`)
-        .once('value')
-        .then(snapshot => snapshot.val())
-
-
-    const incrementPluginInstanceCountForTopic = database
-        .child(`/v2/topics_index/${topicId}/plugin_instances_count`)
-        .transaction(current => {
-            return (current || 0) + 1
-        })
-
-    const instanceToTopics = database
-        .child(`/v2/plugin_instance_to_topic/${pluginInstanceId}/${topicId}`)
-        .set(true)
-
-    return Promise.all([pluginHtml, pluginInstanceName, incrementPluginInstanceCountForTopic, instanceToTopics])
-        .then(result => {
-            console.log(result)
-            const topicsDataPayload = {
-                name: result[1],
-                html: result[0]
-            }
-            return database.child(`/v2/topics_data/${event.params.topicId}/${pluginInstanceId}`)
-                .set(topicsDataPayload)
-        })
+    return Promise.all([
+        actions.queryPluginInstanceData(pluginInstanceId),
+        actions.queryPluginInstanceName(pluginInstanceId),
+        actions.incrementPluginInstanceCountForTopic(topicId),
+        actions.applyInstanceToTopic(pluginInstanceId, topicId)
+    ]).then(result => {
+        console.log('Fetched dependencies for writing instance data to topic', result)
+        return actions.applyPluginInstanceToTopic(topicId, pluginInstanceId, result[1], result[0])
+    })
 })
 
-exports.onTopicCurrentIndex = functions.database.ref('/v2/topics_index/{topicId}/current_index').onUpdate(event => {
+exports.onTopicCurrentIndexUpdated = functions.database.ref('/v2/topics_index/{topicId}/current_index').onUpdate(event => {
     const topicId = event.params.topicId
     const currentIndex = event.data.val()
-    const database = event.data.ref.root
-    return database
-        .child(`/v2/topic_to_devices/${topicId}`)
-        .once('value')
-        .then(readNonEmptySnapshot)
-        .then(topicToDevices => {
-            return Object.keys(topicToDevices)
-        })
+    return actions.queryDeviceIdsByTopic(topicId)
         .then(deviceIds => {
             const pushHtmlToDevice = deviceIds.map(deviceId => {
-                return pushHtmlToDeviceForTopic(database, deviceId, topicId, currentIndex)
+                return pushHtmlToDeviceForTopic(deviceId, topicId, currentIndex)
             })
             return Promise.all(pushHtmlToDevice)
         })
@@ -86,36 +55,16 @@ exports.onTopicCurrentIndex = functions.database.ref('/v2/topics_index/{topicId}
 exports.onDeviceAddedToTopic = functions.database.ref('/v2/topic_to_devices/{topicId}/{deviceId}').onCreate(event => {
     const topicId = event.params.topicId
     const deviceId = event.params.deviceId
-
-    const database = event.data.ref.root
-    return database.child(`/v2/topics_index/${topicId}/current_index`).once('value')
-        .then(snapshot => snapshot.val())
+    return actions.queryTopicCurrentIndex(topicId)
         .then(currentIndex => {
-            return pushHtmlToDeviceForTopic(database, deviceId, topicId, currentIndex)
+            return pushHtmlToDeviceForTopic(deviceId, topicId, currentIndex)
         })
 })
 
-const pushHtmlToDeviceForTopic = (database, deviceId, topicId, index) => {
-    return readTopicHtmlForIndex(database, topicId, index)
-        .then(pushHtmlToDevice(database, deviceId))
+const pushHtmlToDeviceForTopic = (deviceId, topicId, index) => {
+    return actions.queryTopicHtml(topicId, index)
+        .then((html) => actions.applyHtmlToDeviceData(deviceId, html))
         .catch((err) => console.error(topicId, deviceId, index, err))
-}
-
-const readTopicHtmlForIndex = (database, topicId, index) => {
-    return database
-        .child(`/v2/topics_data/${topicId}/`)
-        .once('value')
-        .then(snapshot => snapshot.val())
-        .then(instances => {
-            const instanceKey = Object.keys(instances)[index]
-            return instances[instanceKey].html
-        })
-}
-
-const pushHtmlToDevice = (database, deviceId) => (html) => {
-    return database
-        .child(`/v2/devices_data/${deviceId}`)
-        .set(html)
 }
 
 exports.onMasterTick = functions.database.ref('/v2/master_index').onUpdate(event => {
@@ -141,25 +90,14 @@ exports.masterTick = functions.https.onRequest((request, response) => {
 })
 
 exports.onPluginInstancesDataUpdated = functions.database.ref('/v2/plugin_instances_data/{pluginInstanceId}').onWrite(event => {
-    const database = event.data.ref.root
     const pluginInstanceId = event.params.pluginInstanceId
     const updatedHtml = event.data.val()
-
     console.log('instance data updated', pluginInstanceId)
-
-    return database.child(`/v2/plugin_instance_to_topic/${pluginInstanceId}`).once('value')
-        .then(readNonEmptySnapshot)
-        .then(instance => {
-            return Object.keys(instance)
-        })
+    return actions.queryTopicIdsForPluginInstance(pluginInstanceId)
         .then(topicIds => {
             const updateHtml = topicIds.map(topicId => {
-
                 console.log('set html', topicId, pluginInstanceId)
-
-                return database
-                    .child(`/v2/topics_data/${topicId}/${pluginInstanceId}/html`)
-                    .set(updatedHtml)
+                return actions.applyHtmlToTopicPluginInstanceData(topicId, pluginInstanceId, updatedHtml)
             })
             return Promise.all(updatedHtml)
         })
@@ -176,9 +114,7 @@ exports.pluginCallback = functions.https.onRequest((request, response) => {
 
     htmlRepository.store(pluginInstanceId, html)
         .then(url => {
-            admin.database()
-                .ref(`/v2/plugin_instances_data/${pluginInstanceId}`)
-                .set(url)
+            actions.applyPluginInstanceDataHtml(pluginInstanceId, url)
                 .then(() => {
                     response.status(200).send()
                 })
@@ -207,9 +143,7 @@ exports.addPlugin = functions.https.onRequest((request, response) => {
                 const plugin = JSON.parse(response)
                 const pluginId = Object.keys(plugin)[0]
                 plugin[pluginId].query_url = pluginEndpoint
-                return admin.database()
-                    .ref('/v2/plugins')
-                    .update(plugin)
+                return actions.updatePlugin(plugin)
             })
             .then(() => {
                 response.status(200).send()
@@ -224,10 +158,8 @@ exports.onDeviceDeleted = functions.database.ref('/v2/devices/{deviceId}').onDel
     const database = event.data.ref.root
     const deviceId = event.params.deviceId
     const devicesData = database.child(`/v2/devices_data/${deviceId}`).remove()
-    const topicToDevice = database
-        .child(`/v2/topic_to_devices/`)
-        .once('value')
-        .then(snapshot => snapshot.val())
+
+    const topicToDevice = actions.queryTopicsForAllDevices()
         .then(value => {
             const deleteTopicToDevice = Object.keys(value)
                 .map(key => {
@@ -243,7 +175,6 @@ exports.onDeviceDeleted = functions.database.ref('/v2/devices/{deviceId}').onDel
                 })
             return Promise.all(deleteTopicToDevice)
         })
-
     return Promise.all([devicesData, topicToDevice])
 })
 
@@ -274,51 +205,10 @@ exports.onPluginInstanceDeletedFromTopic = functions.database.ref('v2/plugin_ins
 exports.onPluginInstanceRemovedFromTopic = functions.database.ref('/v2/topics/{topicId}/plugin_instances/{instanceId}').onDelete(event => {
     const pluginInstanceId = event.params.instanceId
     const topicId = event.params.topicId
-    const database = event.data.ref.root
-
-    const removeInstanceToTopic = database
-        .child(`/v2/plugin_instance_to_topic/${pluginInstanceId}/${topicId}`)
-        .remove()
-        .catch(console.err)
-
-    const removeTopicInstanceData = database
-        .child(`/v2/topics_data/${event.params.topicId}/${pluginInstanceId}`)
-        .remove()
-        .catch(console.err)
-
-    const decrementPluginInstanceCountForTopic = database
-        .child(`/v2/topics_index/${topicId}/plugin_instances_count`)
-        .transaction(current => {
-            return (current || 1) - 1
-        })
-        .catch(console.err)
-
-    return Promise.all([removeInstanceToTopic, removeTopicInstanceData, decrementPluginInstanceCountForTopic])
+    return actions.removePluginInstanceFromTopic(pluginInstanceId, topicId)
 })
 
 exports.onTopicDeleted = functions.database.ref('v2/topics/{topicId}').onDelete(event => {
-    const database = event.data.ref.root
     const topicId = event.params.topicId
-
-    const removeTopicIndex = database
-        .child(`/v2/topics_index/${topicId}`)
-        .remove()
-        .catch(console.err)
-
-    const removeTopicToDevices = database
-        .child(`/v2/topic_to_devices/${topicId}`)
-        .remove()
-        .catch(console.err)
-
-    const removeTopicsData = database
-        .child(`/v2/topics_data/${topicId}`)
-        .remove()
-        .catch(console.err)
-
-    return Promise.all([removeTopicIndex, removeTopicToDevices, removeTopicsData])
+    return actions.removeTopic(topicId)
 })
-
-const readNonEmptySnapshot = (snapshot) => {
-    const value = snapshot.val()
-    return value ? Promise.resolve(value) : Promise.reject('snapshot is empty')
-}
