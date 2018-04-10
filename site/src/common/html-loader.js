@@ -1,5 +1,5 @@
 export const loadHtml = (url) => {
-    return fetch(url + "123433243")
+    return fetch(url)
         .then(response => response.ok ? response : toError(url, response))
         .then(response => response.text())
 }
