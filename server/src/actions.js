@@ -139,6 +139,7 @@ module.exports = class Actions {
             .ref(`/v2/topics_data/${topicId}`)
             .remove()
             .catch(console.error)
+        
         return Promise.all([removeTopicIndex, removeTopicToDevices, removeTopicsData])
     }
 
