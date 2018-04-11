@@ -18,7 +18,7 @@ export const watchDeviceContent = (dispatch) => (deviceId) => {
     return watchDeviceData(deviceId, (url) => {
         loadHtml(url).then(html => {
             dispatch(Actions.onDeviceContent(html))
-        }).catch((error) => {
+        }).catch(error => {
             dispatch(Actions.onDeviceContentError(error))
         })
     })
