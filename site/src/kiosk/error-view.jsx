@@ -37,7 +37,7 @@ export default ({ error }) => (
             </p>
             <p>
             </p>
-            <p>#dashboards / #g-it</p>
+            <p>Report to your dashboard administrator if the problem persists</p>
         </div>
     </div>
 )
