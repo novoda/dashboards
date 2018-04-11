@@ -4,7 +4,6 @@ import * as style from './style.css'
 
 export const ContentView = ({ viewState }) => {
     if (viewState.isProvisioned) {
-        console.log('WTF', 'We got animate')
         return <Animate><IframeView key={viewState.html} html={viewState.html} /></Animate>
     } else {
         return <UnprovisionedView id={viewState.id} />

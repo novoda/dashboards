@@ -1,13 +1,12 @@
 import * as Actions from './topic-actions'
 import { watchTopicData } from '../dashboard-repository'
+import { loadHtml } from '../common/html-loader'
 
 export const watchTopicContent = (dispatch) => (topicId) => {
     return watchTopicData(topicId, (url) => {
-        fetch(url)
-            .then(response => response.text())
-            .then(html => {
-                dispatch(Actions.onTopicContent(html))
-            })
+        loadHtml(url).then(html => {
+            dispatch(Actions.onTopicContent(html))
+        })
     })
 }
 

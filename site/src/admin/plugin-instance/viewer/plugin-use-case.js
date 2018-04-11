@@ -1,13 +1,12 @@
 import * as Actions from './plugin-actions'
 import { watchPluginData } from '../../../dashboard-repository'
+import { loadHtml } from '../../../common/html-loader'
 
 export const watchPluginContent = (dispatch) => (pluginId) => {
     return watchPluginData(pluginId, (url) => {
-        fetch(url)
-            .then(response => response.text())
-            .then(html => {
-                dispatch(Actions.onPluginContent(html))
-            })
+        loadHtml(url).then(html => {
+            dispatch(Actions.onPluginContent(html))
+        })
     })
 }
 

@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import * as UseCase from './kiosk-use-case'
 import * as Actions from './kiosk-actions'
 import { ContentView } from '../common/viewer/content-view'
+import ErrorView from './error-view'
 
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
@@ -12,15 +13,19 @@ class Component extends React.Component {
 
     render() {
         if (this.props.id) {
-            return <ContentView viewState={this.props} />
+            if (this.props.error) {
+                return <ErrorView error={this.props.error} />
+            } else {
+                return <ContentView viewState={this.props} />
+            }
         } else {
             return null
         }
     }
 
     componentDidMount() {
-        if (this.props.forcedId) {            
-            this.props.forceId(this.props.forcedId)            
+        if (this.props.forcedId) {
+            this.props.forceId(this.props.forcedId)
         } else {
             this.unsubscribeFromAuthStateChanges = this.props.startWatchingAnonymousStateChange()
         }
@@ -46,11 +51,12 @@ class Component extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const { deviceId, html } = state.kiosk
+    const { deviceId, html, error } = state.kiosk
     return {
         id: deviceId,
         isProvisioned: html ? true : false,
-        html
+        html,
+        error
     }
 }
 
@@ -58,7 +64,7 @@ const mapDispatchToProps = (dispatch) => {
     const auth = firebase.auth()
     const database = firebase.database()
     return {
-        forceId: (forcedId) => dispatch(Actions.onAnonymousDeviceId(forcedId))  ,
+        forceId: (forcedId) => dispatch(Actions.onAnonymousDeviceId(forcedId)),
         startWatchingAnonymousStateChange: UseCase.watchAnonymousStateChange(dispatch, auth),
         startWatchingDeviceContent: UseCase.watchDeviceContent(dispatch, database),
         resetDeviceContent: UseCase.resetDeviceContent(dispatch)
