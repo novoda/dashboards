@@ -11,10 +11,9 @@ const plugin = (create, query) => {
             case 'query':
                 response.status(201).send({ message: `will post response to ${request.body.callbackUrl}` })
                 const callbackUrl = request.body.callbackUrl
-                query(request.body.configuration)
+                return query(request.body.configuration)
                     .then(postHtml(callbackUrl))
                     .catch(console.error)
-                break
             default:
                 response.status(500).send(`Unhandled type: ${type}`)
         }
@@ -29,9 +28,7 @@ const postHtml = (callbackUrl) => (html) => {
             'Content-Type': 'application/json'
         }
     }
-
     return http.post(callbackRequest)
-        .catch(console.error)
 }
 
 module.exports = plugin
