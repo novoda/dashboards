@@ -112,14 +112,14 @@ exports.pluginCallback = functions.https.onRequest((request, response) => {
 
     console.log('plugin callback', pluginInstanceId)
 
-    htmlRepository.store(pluginInstanceId, html)
+    return htmlRepository.store(pluginInstanceId, html)
         .then(url => {
             actions.applyPluginInstanceDataHtml(pluginInstanceId, url)
                 .then(() => {
-                    response.status(200).send()
+                    return response.status(200).send()
                 })
                 .catch(error => {
-                    response.status(500).send(err)
+                    return response.status(500).send(err)
                 })
         })
 })
