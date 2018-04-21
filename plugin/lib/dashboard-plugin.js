@@ -7,6 +7,7 @@ const plugin = (create, query) => {
             case 'create':
                 const configuration = create()
                 response.status(200).send(configuration)
+                break;
             case 'query':
                 const callbackUrl = request.body.callbackUrl
                 query(request.body.configuration)
@@ -18,6 +19,7 @@ const plugin = (create, query) => {
                         console.error(error)
                         response.status(500).send({ message: error })
                     })
+                    break;
             default:
                 response.status(500).send(`Unhandled type: ${type}`)
         }
