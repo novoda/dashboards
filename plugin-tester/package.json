@@ -7,6 +7,9 @@
   "bin": {
     "plugin-tester": "src/index.js"
   },
+  "scripts": {
+    "start": "node src/index.js"
+  },
   "dependencies": {
     "body-parser": "^1.18.2",
     "chokidar": "^2.0.0",
