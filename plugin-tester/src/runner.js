@@ -10,7 +10,7 @@ const ignoredResponse = {
 }
 
 module.exports.local = (path, port, configReader) => () => {
-    try { 
+    try {
         const config = configReader()
         const request = {
             body: {
