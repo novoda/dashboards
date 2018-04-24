@@ -60,7 +60,6 @@ const pluginIsInPath = pluginPath => {
         require.resolve(pluginPath)
         return true
     } catch (error) {
-        console.error(`Plugin ${pluginPath} not found.`)
         return false
     }
 }
@@ -74,6 +73,8 @@ program.command('run [path]')
         const pluginPath = inputPath ? path.resolve(inputPath) : process.cwd()
         if (pluginIsInPath(pluginPath)) {
             runPlugin(pluginPath, options)
+        } else {
+            console.error(`Plugin ${pluginPath} not found.`)
         }
     })
 
