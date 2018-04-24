@@ -9,10 +9,10 @@ const fs = require('fs')
 
 const program = require('commander').version('0.0.1')
 
-program.command('init <name>')
-    .description('Create an inital barebone plugin')
-    .action(name => {
-        template.createTemplate(name)
+program.command('init <name> [path]')
+    .description('Create an inital barebones plugin')
+    .action((name, customPath) => {
+        template.createTemplate(name, customPath)
     })
 
 const resolveConfigPath = config => {
@@ -55,6 +55,15 @@ const runPlugin = (pluginPath, options) => {
     }
 }
 
+const pluginIsInPath = pluginPath => {
+    try {
+        require.resolve(pluginPath)
+        return true
+    } catch (error) {
+        return false
+    }
+}
+
 program.command('run [path]')
     .description('runs the plugin in a local server')
     .option('-w, --watch', 'watch the source directory for changes')
@@ -62,7 +71,11 @@ program.command('run [path]')
     .option('-c --config <path>', 'path to json representation of a configuration')
     .action((inputPath, options) => {
         const pluginPath = inputPath ? path.resolve(inputPath) : process.cwd()
-        runPlugin(pluginPath, options)
+        if (pluginIsInPath(pluginPath)) {
+            runPlugin(pluginPath, options)
+        } else {
+            console.error(`Plugin ${pluginPath} not found.`)
+        }
     })
 
 program.parse(process.argv)
