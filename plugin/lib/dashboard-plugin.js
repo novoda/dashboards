@@ -10,10 +10,7 @@ const plugin = (create, query) => {
                 break;
             case 'query':
                 const callbackUrl = request.body.callbackUrl
-
-console.log('<<<<<<<<<<', request) // need to redeploy
-
-                query(request.body.configuration, request.body.pluginInstanceId)// query(request.body.configuration)
+                query(request.body.configuration, request.body.pluginInstanceId)
                     .then(postHtml(callbackUrl))
                     .then(() => {
                         response.status(201).send({ message: `response posted to ${request.body.callbackUrl}` })
