@@ -45,15 +45,15 @@ module.exports.local = (path, port, configReader) => () => {
                 type: 'query',
                 callbackUrl: `http://localhost:${port}/callback`,
                 configuration: config,
-                pluginInstanceId: config.pluginInstanceId // config.json no longer maps directly to the configuration object
+                pluginInstanceId: config.pluginInstanceId
             }
         }
         decache(path)
-        //require(path).plugin()(request, ignoredResponse)
         const dependencies = {
             cache: cache
         }
-        require(path).plugin(dependencies)(request, ignoredResponse)
+        const plugin = require(path).plugin(dependencies)
+        plugin(request, ignoredResponse)
         console.log("Deployed plugin successfully\n")
     } catch (error) {
         console.log("Compile error:\n", error, "\n")
