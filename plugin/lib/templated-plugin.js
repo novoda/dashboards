@@ -4,10 +4,10 @@ const fs = require('fs')
 const path = require('path')
 const utf8 = require('utf8')
 
-const render = (component, viewStateProvider) => (configuration) => {
+const render = (component, viewStateProvider) => (configuration, pluginInstanceId) => {
     const directory = { __dirname: component.__dirname }
     if (viewStateProvider) {
-        return viewStateProvider(configuration).then((viewState) => {
+        return viewStateProvider(configuration, pluginInstanceId).then((viewState) => {
             const state = Object.assign(viewState || {}, directory)
             return renderComponent(component, state)
         })
@@ -30,6 +30,6 @@ const inline = (html) => {
     })
 }
 
-module.exports = (plugin) => (configuration, component, viewStateProvider) => {
-    return plugin(configuration, render(component, viewStateProvider))
+module.exports = (plugin) => (createConfiguration, component, viewStateProvider) => {
+    return plugin(createConfiguration, render(component, viewStateProvider))
 }
