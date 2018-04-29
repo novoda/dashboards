@@ -1,7 +1,8 @@
 const dashboardPlugin = require('./dashboard-plugin')
+const templatedPlugin = require('./templated-plugin')
 
 const plugin = {
-    templated: require('./templated-plugin')(dashboardPlugin),
+    templated: templatedPlugin(dashboardPlugin),
     vanilla: dashboardPlugin,
     createStringField: (label) => {
         return {
@@ -11,4 +12,4 @@ const plugin = {
     }
 }
 
-module.exports = plugin 
+module.exports = plugin
