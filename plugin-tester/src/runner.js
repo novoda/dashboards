@@ -1,10 +1,11 @@
 const http = require('request-promise-native')
 const decache = require('decache')
-const cache = require('./local-cache')
-const fbcache = require('./firebase-cache')
+const firebaseCache = require('./firebase-cache')
+
+const REFRESH_INTERVAL = (60 * 1000) * 30
 
 const dependencies = {
-    cache: fbcache(60 * 1000 * 30)
+    cache: firebaseCache(REFRESH_INTERVAL)
 }
 
 const ignoredResponse = {
@@ -15,7 +16,7 @@ const ignoredResponse = {
     }
 }
 
-module.exports.local = (path, port, configReader) => () => {
+module.exports.local = (pluginPath, port, configReader) => () => {
     try {
         const config = configReader()
         const request = {
@@ -26,9 +27,8 @@ module.exports.local = (path, port, configReader) => () => {
                 pluginInstanceId: config.pluginInstanceId
             }
         }
-        decache(path)
-        const plugin = require(path).plugin(dependencies)
-        plugin(request, ignoredResponse)
+        decache(pluginPath)
+        require(pluginPath)(request, ignoredResponse)
         console.log("Deployed plugin successfully\n")
     } catch (error) {
         console.log("Compile error:\n", error, "\n")

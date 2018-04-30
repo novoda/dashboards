@@ -2,7 +2,6 @@ const admin = require('firebase-admin')
 const database = admin.database()
 
 const DATABASE_ROOT = '/plugin-cache'
-const REFRESH_INTERVAL = (60 * 1000) * 30
 
 const _hasExpired = (id, interval) => {
   const rootRef = database.ref(`${DATABASE_ROOT}/${id}`)
@@ -39,6 +38,6 @@ module.exports = (interval) => {
   return {
     hasExpired: (id) => _hasExpired(id, interval),
     save: (id, viewState) => _save(id, viewState),
-    read: (id) => _read(id, REFRESH_INTERVAL) //new Promise((resolve, reject) => resolve(_read(id)))
+    read: (id) => _read(id, interval)
   }
 }
