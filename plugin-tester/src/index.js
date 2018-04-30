@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 
-const serviceAccount = require("./firebase-secret.json");
+const serviceAccount = require('./firebase-secrets.json');
 const admin = require('firebase-admin')
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
