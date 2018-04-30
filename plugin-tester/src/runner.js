@@ -1,33 +1,10 @@
 const http = require('request-promise-native')
 const decache = require('decache')
-const fs = require('fs')
+const cache = require('./local-cache')
 
-//
-const _exists = (id) => {
-    try {
-        fs.accessSync(encodeURIComponent(id) + '.cache')
-        return true
-    } catch (error) {
-        return false
-    }
+const dependencies = {
+    cache: cache
 }
-
-const _save = (id, data) => {
-    fs.writeFileSync(encodeURIComponent(id) + '.cache', JSON.stringify(data))
-}
-
-const _read = (id) => {
-    const path = encodeURIComponent(id) + '.cache'
-    const data = fs.readFileSync(path)
-    return JSON.parse(data)
-}
-
-const cache = {
-    hasExpired: (id) => !_exists(id),
-    save: (id, viewState) => _save(id, viewState),
-    read: (id) => new Promise((resolve, reject) => resolve(_read(id)))
-}
-//
 
 const ignoredResponse = {
     status: () => {
@@ -49,9 +26,6 @@ module.exports.local = (path, port, configReader) => () => {
             }
         }
         decache(path)
-        const dependencies = {
-            cache: cache
-        }
         const plugin = require(path).plugin(dependencies)
         plugin(request, ignoredResponse)
         console.log("Deployed plugin successfully\n")
