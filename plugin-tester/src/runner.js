@@ -28,7 +28,8 @@ module.exports.local = (pluginPath, port, configReader) => () => {
             }
         }
         decache(pluginPath)
-        require(pluginPath)(request, ignoredResponse)
+        const plugin = require(pluginPath).plugin(dependencies)
+        plugin(request, ignoredResponse)
         console.log("Deployed plugin successfully\n")
     } catch (error) {
         console.log("Compile error:\n", error, "\n")
