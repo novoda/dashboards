@@ -16,6 +16,7 @@
     "commander": "^2.13.0",
     "decache": "^4.4.0",
     "express": "^4.16.2",
+    "firebase-admin": "^5.9.0",
     "glob": "^7.1.2",
     "mustache": "^2.3.0",
     "request": "^2.83.0",

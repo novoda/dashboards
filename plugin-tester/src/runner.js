@@ -1,9 +1,10 @@
 const http = require('request-promise-native')
 const decache = require('decache')
 const cache = require('./local-cache')
+const fbcache = require('./firebase-cache')
 
 const dependencies = {
-    cache: cache
+    cache: fbcache(60 * 1000 * 30)
 }
 
 const ignoredResponse = {

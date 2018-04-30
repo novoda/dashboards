@@ -1,12 +1,18 @@
 #! /usr/bin/env node
 
+const serviceAccount = require("./firebase-secret.json");
+const admin = require('firebase-admin')
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://dashboards-plugins.firebaseio.com"
+});
+
 const chokidar = require('chokidar');
 const Server = require('./server')
-const runnerCreator = require('./runner')
 const template = require('./template')
 const path = require('path')
 const fs = require('fs')
-
+const runnerCreator = require('./runner')
 const program = require('commander').version('0.0.1')
 
 program.command('init <name> [path]')
