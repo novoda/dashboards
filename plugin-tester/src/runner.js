@@ -9,18 +9,19 @@ const ignoredResponse = {
     }
 }
 
-module.exports.local = (path, port, configReader) => () => {
+module.exports.local = (pluginPath, port, configReader, dependencies) => () => {
     try {
         const config = configReader()
         const request = {
             body: {
                 type: 'query',
                 callbackUrl: `http://localhost:${port}/callback`,
-                configuration: config
+                configuration: config,
+                meta: { id: 'plugin-tester' }
             }
         }
-        decache(path)
-        require(path).plugin()(request, ignoredResponse)
+        decache(pluginPath)
+        require(pluginPath).plugin(dependencies)(request, ignoredResponse)
         console.log("Deployed plugin successfully\n")
     } catch (error) {
         console.log("Compile error:\n", error, "\n")
