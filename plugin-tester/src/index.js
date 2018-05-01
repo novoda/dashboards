@@ -1,12 +1,5 @@
 #! /usr/bin/env node
 
-const serviceAccount = require('./firebase-secrets.json');
-const admin = require('firebase-admin')
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://dashboards-plugins.firebaseio.com"
-});
-
 const chokidar = require('chokidar');
 const Server = require('./server')
 const template = require('./template')
@@ -29,10 +22,10 @@ const readJson = path => {
     return JSON.parse(fs.readFileSync(path))
 }
 
-const createConfigReader = (pluginPath, options) => () => {
-    const configPath = path.join(pluginPath, 'config.json')
-    if (options.config) {
-        return readJson(resolveConfigPath(options.config))
+const createConfigReader = (pluginPath, fileName, option) => () => {
+    const configPath = path.join(pluginPath, fileName)
+    if (option) {
+        return readJson(resolveConfigPath(option))
     } else if (fs.existsSync(configPath)) {
         return readJson(configPath)
     } else {
@@ -46,10 +39,32 @@ const createWatcher = onChange => location => {
         .on('change', onChange)
 }
 
+const createFirebaseDependencies = (firebaseReader) => {
+    const serviceAccount = firebaseReader()
+
+    if (serviceAccount === {}) {
+        return {}
+    }
+
+    const admin = require('firebase-admin')
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: `https://${serviceAccount.project_id}.firebaseio.com`
+    });
+
+    return {
+        database: () => admin.database()
+    }
+}
+
 const runPlugin = (pluginPath, options) => {
     const port = options.port || 5000
-    const configReader = createConfigReader(pluginPath, options)
-    const pluginRunner = runnerCreator.local(pluginPath, port, configReader)
+    const configReader = createConfigReader(pluginPath, 'config.json', options.config)
+    const firebaseReader = createConfigReader(pluginPath, 'firebase-secrets.json', options.firebase)
+    let dependencies = {}
+    dependencies = Object.assign(dependencies, createFirebaseDependencies(firebaseReader))
+
+    const pluginRunner = runnerCreator.local(pluginPath, port, configReader, dependencies)
     const server = new Server(port, pluginRunner)
     server.start()
     if (options.watch) {
@@ -73,8 +88,9 @@ const pluginIsInPath = pluginPath => {
 program.command('run [path]')
     .description('runs the plugin in a local server')
     .option('-w, --watch', 'watch the source directory for changes')
-    .option('-p --port', 'optional local server port. default 5000')
-    .option('-c --config <path>', 'path to json representation of a configuration')
+    .option('-p, --port', 'optional local server port. default 5000')
+    .option('-c, --config <path>', 'path to json representation of a configuration')
+    .option('-f, --firebase <path>', 'path to firebase service account json file')
     .action((inputPath, options) => {
         const pluginPath = inputPath ? path.resolve(inputPath) : process.cwd()
         if (pluginIsInPath(pluginPath)) {
