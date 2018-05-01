@@ -16,7 +16,7 @@ const collectAllPlugins = pluginInstancesByPlugin => {
     )
 }
 
-const tickAllPlugins = (projectId) => (pluginInstances) => {
+const tickAllPlugins = (projectId, http) => (pluginInstances) => {
     console.log('> tickAllPlugins:', pluginInstances)
     const queryAllPlugins = pluginInstances.map(instance => {
         const requestPayload = {
@@ -48,7 +48,7 @@ module.exports = (projectId, http, database) => {
                 .once('value')
                 .then(snapshot => snapshot.val())
                 .then(collectAllPlugins)
-                .then(tickAllPlugins(projectId))
+                .then(tickAllPlugins(projectId, http))
         }
     }
 }
