@@ -1,12 +1,5 @@
 const http = require('request-promise-native')
 const decache = require('decache')
-const firebaseCache = require('./firebase-cache')
-
-const REFRESH_INTERVAL = (60 * 1000) * 30
-
-const dependencies = {
-    cache: firebaseCache(REFRESH_INTERVAL)
-}
 
 const ignoredResponse = {
     status: () => {
@@ -16,7 +9,7 @@ const ignoredResponse = {
     }
 }
 
-module.exports.local = (pluginPath, port, configReader) => () => {
+module.exports.local = (pluginPath, port, configReader, dependencies) => () => {
     try {
         const config = configReader()
         const request = {
@@ -24,12 +17,11 @@ module.exports.local = (pluginPath, port, configReader) => () => {
                 type: 'query',
                 callbackUrl: `http://localhost:${port}/callback`,
                 configuration: config,
-                pluginInstanceId: config.pluginInstanceId
+                meta: { id: 'plugin-tester' }
             }
         }
         decache(pluginPath)
-        const plugin = require(pluginPath).plugin(dependencies)
-        plugin(request, ignoredResponse)
+        require(pluginPath).plugin(dependencies)(request, ignoredResponse)
         console.log("Deployed plugin successfully\n")
     } catch (error) {
         console.log("Compile error:\n", error, "\n")
