@@ -10,7 +10,7 @@ const plugin = (create, query) => {
                 break;
             case 'query':
                 const callbackUrl = request.body.callbackUrl
-                query(request.body.configuration, request.body.pluginInstanceId)
+                query(request.body.configuration, request.body.meta)
                     .then(postHtml(callbackUrl))
                     .then(() => {
                         response.status(201).send({ message: `response posted to ${request.body.callbackUrl}` })
