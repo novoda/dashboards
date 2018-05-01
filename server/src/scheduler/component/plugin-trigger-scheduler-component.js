@@ -19,7 +19,7 @@ const tickAllPlugins = (projectId) = (pluginInstances) => {
     console.log(pluginInstances)
     const queryAllPlugins = pluginInstances.map(instance => {
         const requestPayload = {
-            pluginInstanceId: instance.pluginInstanceId,
+            meta: { id: instance.pluginInstanceId },
             configuration: instance.configuration,
             callbackUrl: `https://us-central1-${projectId}.cloudfunctions.net/pluginCallback?pluginInstanceId=${instance.pluginInstanceId}`,
             type: 'query'
