@@ -61,8 +61,9 @@ const runPlugin = (pluginPath, options) => {
     const port = options.port || 5000
     const configReader = createConfigReader(pluginPath, 'config.json', options.config)
     const firebaseReader = createConfigReader(pluginPath, 'firebase-secrets.json', options.firebase)
+
     let dependencies = {}
-    dependencies = Object.assign(dependencies, createFirebaseDependencies(firebaseReader))
+    Object.assign(dependencies, createFirebaseDependencies(firebaseReader))
 
     const pluginRunner = runnerCreator.local(pluginPath, port, configReader, dependencies)
     const server = new Server(port, pluginRunner)

@@ -5,7 +5,6 @@ const hasExpired = (database, interval) => (id) => {
   return rootRef.child('lastUpdated')
     .once('value')
     .then(snapshot => snapshot.val())
-    .then(val => { return console.log(val), val })
     .then(lastUpdated => lastUpdated === null || (lastUpdated > Date.now() + interval))
 }
 
