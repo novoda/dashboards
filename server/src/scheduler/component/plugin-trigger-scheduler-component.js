@@ -1,5 +1,4 @@
 const collectAllPlugins = pluginInstancesByPlugin => {
-    console.log('> collectAllPlugins:', pluginInstancesByPlugin)
     return Object.keys(pluginInstancesByPlugin).map(pluginKey => {
         const plugin = pluginInstancesByPlugin[pluginKey]
         return Object.keys(plugin).map(pluginInstanceKey => {
@@ -17,7 +16,6 @@ const collectAllPlugins = pluginInstancesByPlugin => {
 }
 
 const tickAllPlugins = (projectId, http) => (pluginInstances) => {
-    console.log('> tickAllPlugins:', pluginInstances)
     const queryAllPlugins = pluginInstances.map(instance => {
         const requestPayload = {
             meta: { id: instance.pluginInstanceId },
