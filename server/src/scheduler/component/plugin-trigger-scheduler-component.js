@@ -16,7 +16,7 @@ const collectAllPlugins = pluginInstancesByPlugin => {
     )
 }
 
-const tickAllPlugins = (projectId) = (pluginInstances) => {
+const tickAllPlugins = (projectId) => (pluginInstances) => {
     console.log('> tickAllPlugins:', pluginInstances)
     const queryAllPlugins = pluginInstances.map(instance => {
         const requestPayload = {
