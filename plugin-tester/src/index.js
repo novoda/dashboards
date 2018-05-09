@@ -41,8 +41,7 @@ const createWatcher = onChange => location => {
 
 const createFirebaseDependencies = (firebaseReader) => {
     const serviceAccount = firebaseReader()
-
-    if (serviceAccount === {}) {
+    if (Object.keys(serviceAccount).length === 0) {
         return {}
     }
 
