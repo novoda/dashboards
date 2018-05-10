@@ -1,4 +1,4 @@
-const TWO_MINUTES = (2 * (60 * 1000))
+const FIVE_MINUTES = (5 * (60 * 1000))
 
 module.exports = class HtmlRepository {
 
@@ -11,7 +11,7 @@ module.exports = class HtmlRepository {
 
         const filePath = `${rootPath}/index-${Date.now()}.html`
         const file = this.bucket.file(filePath)
-        const expiryTime = Date.now() + TWO_MINUTES
+        const expiryTime = Date.now() + FIVE_MINUTES
 
         const fileOptions = {
             metadata: {
@@ -35,7 +35,7 @@ module.exports = class HtmlRepository {
     refreshUrl(url) {
         const regex = /(.*)\/(.*html)/
         const filePath = decodeURIComponent(url.match(regex)[2])
-        const expiryTime = Date.now() + TWO_MINUTES
+        const expiryTime = Date.now() + FIVE_MINUTES
         const file = this.bucket.file(filePath)
         return file.setMetadata({ metadata: { expires: expiryTime } })
             .then(() => this._generateSignedUrl(file, expiryTime))
