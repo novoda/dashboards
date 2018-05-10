@@ -102,7 +102,7 @@ exports.onPluginInstancesDataUpdated = functions.database.ref('/v2/plugin_instan
             return Promise.all(updatedHtml)
         })
         .catch(err => {
-            console.error('Failed to update topic data as the instance is not in a topic', pluginInstanceId, err)
+            console.log('Failed to update topic data as the instance is not in a topic', pluginInstanceId, err)
         })
 })
 
