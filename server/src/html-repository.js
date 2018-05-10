@@ -1,4 +1,5 @@
 const FIVE_MINUTES = (5 * (60 * 1000))
+const THREE_MINUTES = (3 * (60 * 1000))
 
 module.exports = class HtmlRepository {
 
@@ -59,7 +60,7 @@ module.exports = class HtmlRepository {
             .then(filesWrapper => {
                 const files = filesWrapper[0]
                 const deleteFiles = files
-                    .filter(file => file.metadata.metadata.expires < Date.now())
+                    .filter(file => file.metadata.metadata.expires + THREE_MINUTES < Date.now())
                     .map(file => {
                         console.log(`delete: ${file.name}`)
                         return file
