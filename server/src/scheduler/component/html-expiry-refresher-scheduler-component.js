@@ -3,7 +3,7 @@ module.exports = (database, htmlRepository) => {
         tickRate: 3,
         tick: () => {
             console.log('running html expiry refresher')
-            return database.child(`/v2/plugin_instances_data/`)
+            return database.ref(`/v2/plugin_instances_data/`)
                 .once('value')
                 .then(snapshot => {
                     const instancesData = snapshot.val()
@@ -13,7 +13,7 @@ module.exports = (database, htmlRepository) => {
                             return htmlRepository
                                 .refreshUrl(currentUrl)
                                 .then(refreshedUrl => {
-                                    return database.child(`/v2/plugin_instances_data/${key}`)
+                                    return database.ref(`/v2/plugin_instances_data/${key}`)
                                         .set(refreshedUrl)
                                 }).catch(console.err)
                         })

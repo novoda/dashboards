@@ -3,7 +3,7 @@ module.exports = (database) => {
         tickRate: 1,
         tick: () => {
             console.log('running topic index updater')
-            return database.child('/v2/topics_index')
+            return database.ref('/v2/topics_index')
                 .once('value')
                 .then(snapshot => snapshot.val())
                 .then(indexes => {
@@ -18,7 +18,7 @@ module.exports = (database) => {
                 .then(nextIndexesForTopic => {
                     return Promise.all(nextIndexesForTopic.map(nextIndexForTopic => {
                         const topicId = nextIndexForTopic.topicId
-                        return database.child(`/v2/topics_index/${topicId}/current_index`)
+                        return database.ref(`/v2/topics_index/${topicId}/current_index`)
                             .set(nextIndexForTopic.nextIndex)
                     }))
                 })
