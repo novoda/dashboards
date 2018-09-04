@@ -5,27 +5,27 @@ const HtmlRepository = require('./html-repository')
 const Scheduler = require('./scheduler/scheduler')
 const cors = require('cors')({ origin: true });
 const Actions = require('./actions')
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp()
 
 const bucket = admin.storage().bucket()
 const htmlRepository = new HtmlRepository(bucket)
 
 const actions = new Actions(admin.database())
 
-exports.onPluginInstanceWrite = functions.database.ref('/v2/plugin_instances/{pluginId}/{pluginInstanceId}/').onWrite(event => {
-    const payload = event.data.val()
-    const pluginInstanceId = event.params.pluginInstanceId
+exports.onPluginInstanceWrite = functions.database.ref('/v2/plugin_instances/{pluginId}/{pluginInstanceId}/').onWrite((change, context) => {
+    const payload = change.after.val()
+    const pluginInstanceId = context.params.pluginInstanceId
     return actions.applyPluginInstanceName(pluginInstanceId, payload.name)
 })
 
-exports.onNewTopic = functions.database.ref('/v2/topics/{topicId}').onCreate(event => {
-    const topicId = event.params.topicId
+exports.onNewTopic = functions.database.ref('/v2/topics/{topicId}').onCreate((snapshot, context) => {
+    const topicId = context.params.topicId
     return actions.applyInitialIndexToTopic(topicId)
 })
 
-exports.onPluginInstanceAddedToTopic = functions.database.ref('/v2/topics/{topicId}/plugin_instances/{instanceId}').onCreate(event => {
-    const pluginInstanceId = event.params.instanceId
-    const topicId = event.params.topicId
+exports.onPluginInstanceAddedToTopic = functions.database.ref('/v2/topics/{topicId}/plugin_instances/{instanceId}').onCreate((snapshot, context) => {
+    const pluginInstanceId = context.params.instanceId
+    const topicId = context.params.topicId
     return Promise.all([
         actions.queryPluginInstanceData(pluginInstanceId),
         actions.queryPluginInstanceName(pluginInstanceId),
@@ -37,9 +37,9 @@ exports.onPluginInstanceAddedToTopic = functions.database.ref('/v2/topics/{topic
     })
 })
 
-exports.onTopicCurrentIndexUpdated = functions.database.ref('/v2/topics_index/{topicId}/current_index').onUpdate(event => {
-    const topicId = event.params.topicId
-    const currentIndex = event.data.val()
+exports.onTopicCurrentIndexUpdated = functions.database.ref('/v2/topics_index/{topicId}/current_index').onUpdate((change, context) => {
+    const topicId = context.params.topicId
+    const currentIndex = change.after.val()
     return actions.queryDeviceIdsByTopic(topicId)
         .then(deviceIds => {
             const pushHtmlToDevice = deviceIds.map(deviceId => {
@@ -52,9 +52,9 @@ exports.onTopicCurrentIndexUpdated = functions.database.ref('/v2/topics_index/{t
         })
 })
 
-exports.onDeviceAddedToTopic = functions.database.ref('/v2/topic_to_devices/{topicId}/{deviceId}').onCreate(event => {
-    const topicId = event.params.topicId
-    const deviceId = event.params.deviceId
+exports.onDeviceAddedToTopic = functions.database.ref('/v2/topic_to_devices/{topicId}/{deviceId}').onCreate((snapshot, context) => {
+    const topicId = context.params.topicId
+    const deviceId = context.params.deviceId
     return actions.queryTopicCurrentIndex(topicId)
         .then(currentIndex => {
             return pushHtmlToDeviceForTopic(deviceId, topicId, currentIndex)
@@ -67,11 +67,10 @@ const pushHtmlToDeviceForTopic = (deviceId, topicId, index) => {
         .catch((err) => console.error(topicId, deviceId, index, err))
 }
 
-exports.onMasterTick = functions.database.ref('/v2/master_index').onUpdate(event => {
-    const database = event.data.ref.root
-    const tickValue = event.data.val()
+exports.onMasterTick = functions.database.ref('/v2/master_index').onUpdate((change, context) => {
+    const tickValue = change.after.val()
     const projectId = process.env.GCLOUD_PROJECT
-    const scheduler = new Scheduler(projectId, http, database, htmlRepository)
+    const scheduler = new Scheduler(projectId, http, admin.database(), htmlRepository)
     return scheduler.tick(tickValue)
 })
 
@@ -89,9 +88,9 @@ exports.masterTick = functions.https.onRequest((request, response) => {
         })
 })
 
-exports.onPluginInstancesDataUpdated = functions.database.ref('/v2/plugin_instances_data/{pluginInstanceId}').onWrite(event => {
-    const pluginInstanceId = event.params.pluginInstanceId
-    const updatedHtml = event.data.val()
+exports.onPluginInstancesDataUpdated = functions.database.ref('/v2/plugin_instances_data/{pluginInstanceId}').onWrite((change, context) => {
+    const pluginInstanceId = context.params.pluginInstanceId
+    const updatedHtml = change.after.val()
     console.log('instance data updated', pluginInstanceId)
     return actions.queryTopicIdsForPluginInstance(pluginInstanceId)
         .then(topicIds => {
@@ -154,10 +153,9 @@ exports.addPlugin = functions.https.onRequest((request, response) => {
     })
 })
 
-exports.onDeviceDeleted = functions.database.ref('/v2/devices/{deviceId}').onDelete(event => {
-    const database = event.data.ref.root
-    const deviceId = event.params.deviceId
-    const devicesData = database.child(`/v2/devices_data/${deviceId}`).remove()
+exports.onDeviceDeleted = functions.database.ref('/v2/devices/{deviceId}').onDelete((snapshot, context) => {
+    const deviceId = context.params.deviceId
+    const devicesData = admin.database().ref(`/v2/devices_data/${deviceId}`).remove()
 
     const topicToDevice = actions.queryTopicsForAllDevices()
         .then(value => {
@@ -178,37 +176,35 @@ exports.onDeviceDeleted = functions.database.ref('/v2/devices/{deviceId}').onDel
     return Promise.all([devicesData, topicToDevice])
 })
 
-exports.onPluginDeleted = functions.database.ref('v2/plugins/{pluginId}').onDelete(event => {
-    const database = event.data.ref.root
-    const pluginId = event.params.pluginId
-    return database.child(`/v2/plugin_instances/${pluginId}`).remove()
+exports.onPluginDeleted = functions.database.ref('v2/plugins/{pluginId}').onDelete((snapshot, context) => {
+    const pluginId = context.params.pluginId
+    return admin.database().ref(`/v2/plugin_instances/${pluginId}`).remove()
 })
 
-exports.onPluginInstanceDeleted = functions.database.ref('v2/plugin_instances/{pluginId}/{instanceId}').onDelete(event => {
-    const database = event.data.ref.root
-    const instanceId = event.params.instanceId
+exports.onPluginInstanceDeleted = functions.database.ref('v2/plugin_instances/{pluginId}/{instanceId}').onDelete((snapshot, context) => {
+    const database = admin.database()
+    const instanceId = context.params.instanceId
     const cleanUp = [
-        database.child(`/v2/plugin_instances_named/${instanceId}`).remove(),
-        database.child(`/v2/plugin_instances_data/${instanceId}`).remove(),
-        database.child(`/v2/plugin_instance_to_topic/${instanceId}`).remove()
+        database.ref(`/v2/plugin_instances_named/${instanceId}`).remove(),
+        database.ref(`/v2/plugin_instances_data/${instanceId}`).remove(),
+        database.ref(`/v2/plugin_instance_to_topic/${instanceId}`).remove()
     ]
     return Promise.all(cleanUp)
 })
 
-exports.onPluginInstanceDeletedFromTopic = functions.database.ref('v2/plugin_instance_to_topic/{instanceId}/{topicId}').onDelete(event => {
-    const database = event.data.ref.root
-    const instanceId = event.params.instanceId
-    const topicId = event.params.topicId
-    return database.child(`/v2/topics/${topicId}/pluginInstances/{instanceId}`).remove()
+exports.onPluginInstanceDeletedFromTopic = functions.database.ref('v2/plugin_instance_to_topic/{instanceId}/{topicId}').onDelete((snapshot, context) => {
+    const instanceId = context.params.instanceId
+    const topicId = context.params.topicId
+    return admin.database().ref(`/v2/topics/${topicId}/pluginInstances/{instanceId}`).remove()
 })
 
-exports.onPluginInstanceRemovedFromTopic = functions.database.ref('/v2/topics/{topicId}/plugin_instances/{instanceId}').onDelete(event => {
-    const pluginInstanceId = event.params.instanceId
-    const topicId = event.params.topicId
+exports.onPluginInstanceRemovedFromTopic = functions.database.ref('/v2/topics/{topicId}/plugin_instances/{instanceId}').onDelete((snapshot, context) => {
+    const pluginInstanceId = context.params.instanceId
+    const topicId = context.params.topicId
     return actions.removePluginInstanceFromTopic(pluginInstanceId, topicId)
 })
 
-exports.onTopicDeleted = functions.database.ref('v2/topics/{topicId}').onDelete(event => {
-    const topicId = event.params.topicId
+exports.onTopicDeleted = functions.database.ref('v2/topics/{topicId}').onDelete((snapshot, context) => {
+    const topicId = context.params.topicId
     return actions.removeTopic(topicId)
 })
