@@ -169,7 +169,7 @@ exports.onDeviceDeleted = functions.database.ref('/v2/devices/{deviceId}').onDel
                 })
                 .filter(topic => topic.deviceIds.includes(deviceId))
                 .map(topic => {
-                    return database.child(`/v2/topic_to_devices/${topic.topicId}/${deviceId}`).remove()
+                    return database.ref(`/v2/topic_to_devices/${topic.topicId}/${deviceId}`).remove()
                 })
             return Promise.all(deleteTopicToDevice)
         })
