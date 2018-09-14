@@ -4,9 +4,7 @@ import { loadHtml } from '../common/html-loader'
 
 export const watchTopicContent = (dispatch) => (topicId) => {
     return watchTopicData(topicId, (url) => {
-        loadHtml(url).then(html => {
-            dispatch(Actions.onTopicContent(html))
-        })
+        dispatch(Actions.onTopicContent(url))
     })
 }
 

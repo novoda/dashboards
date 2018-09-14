@@ -7,9 +7,9 @@ const initialState = {
 
 export const topic = handleActions({
     [Actions.ON_TOPIC_CONTENT]: (state, action) => {
-        return { ...state, html: action.payload }
+        return { ...state, url: action.payload }
     },
     [Actions.ON_RESET_TOPIC_CONTENT]: (state, action) => {
-        return { ...state, html: undefined }
+        return { ...state, url: undefined }
     }
 }, initialState)
