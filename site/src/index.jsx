@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { HomeComponent } from './admin/home/home-component'
-import injectTapEventPlugin from 'react-tap-event-plugin'
 import { create } from './store'
 import config from './config'
 import * as firebase from 'firebase/app'
@@ -21,7 +20,6 @@ document.body.style.padding = 0;
 document.body.style.margin = 0;
 
 firebase.initializeApp(config);
-injectTapEventPlugin();
 const store = create();
 
 class App extends React.Component {
