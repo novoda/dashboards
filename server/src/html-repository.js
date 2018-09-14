@@ -61,6 +61,8 @@ module.exports = class HtmlRepository {
                 const files = filesWrapper[0]
                 return Promise.all(files.map(file => {
                     return file.getMetadata().then(result => {
+                        console.log("!!")
+                        console.log(result[0])
                         return Object.assign(file, { metadata: result[0] })
                     })
                 }))
