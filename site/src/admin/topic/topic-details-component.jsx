@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import * as UseCase from './topic-use-case'
 import { TopicView } from './topic-view'
-import { TopicComponent as Foo } from '../../topic/topic-component'
 
 class Component extends React.Component {
 
@@ -21,7 +20,6 @@ class Component extends React.Component {
                     onBack={() => {
                         this.props.history.goBack()
                     }} />
-                <Foo {...this.props}/>    
             </div>
         )
     }
