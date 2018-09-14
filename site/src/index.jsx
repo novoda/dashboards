@@ -38,8 +38,8 @@ class App extends React.Component {
                     <MuiThemeProvider>
                         <BrowserRouter>
                             <Switch>
-                                <Route exact path="/kiosk" component={KioskComponent} />
                                 <Route exact path="/" component={LandingComponent} />
+                                <Route exact path="/kiosk" component={KioskComponent} />
                                 <Route path="/topic/:topicId" component={TopicComponent} />
                                 <Route exact path="/admin" component={HomeComponent} />
                                 <Route path="/admin/plugins/add" render={(props) => <PluginComponent type='add' {...props} />} />
@@ -87,7 +87,7 @@ const onSignInClicked = () => () => {
     firebase.auth().signInWithPopup(provider)
 }
 
-const AuthComponent = ({}) => {
+const AuthComponent = ({ }) => {
     return (
         <button onClick={onSignInClicked()}> Sign in</button>
     )
