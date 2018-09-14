@@ -59,6 +59,8 @@ module.exports = class HtmlRepository {
         return this.bucket.getFiles()
             .then(filesWrapper => {
                 const files = filesWrapper[0]
+                console.log("!!!")
+                console.log(files[0])
                 const deleteFiles = files
                     .filter(file => file.metadata.metadata.expires + THREE_MINUTES < Date.now())
                     .map(file => {
