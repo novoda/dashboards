@@ -11,7 +11,7 @@ import 'firebase/database'
 class Component extends React.Component {
 
     render() {
-        return <ContentComponent url={this.props.url} />
+        return <ContentComponent url={this.props.url} id={this.props.id} />
     }
 
     componentDidMount() {
