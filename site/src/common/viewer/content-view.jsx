@@ -11,7 +11,9 @@ const Animate = ({ children }) => {
         <ReactCSSTransitionGroup
             transitionName="content"
             transitionEnter={true}
-            transitionLeave={true}>
+            transitionLeave={true}
+            transitionEnterTimeout={1500}
+            transitionLeaveTimeout={1500}>
             {children}
         </ReactCSSTransitionGroup>
     )
