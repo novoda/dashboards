@@ -20,7 +20,7 @@ export default class ContentComponent extends React.Component {
             return <UnprovisionedView id={this.props.id} />
         } else if (this.state.error) {
             return <ErrorView error={this.state.error} />
-        } else if (this.props.url) {
+        } else if (this.props.url && this.state.html) {
             return <ContentView html={this.state.html} />
         } else {
             return null
