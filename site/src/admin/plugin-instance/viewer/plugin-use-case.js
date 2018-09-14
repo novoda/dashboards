@@ -4,9 +4,7 @@ import { loadHtml } from '../../../common/html-loader'
 
 export const watchPluginContent = (dispatch) => (pluginId) => {
     return watchPluginData(pluginId, (url) => {
-        loadHtml(url).then(html => {
-            dispatch(Actions.onPluginContent(html))
-        })
+            dispatch(Actions.onPluginContent(url))
     })
 }
 

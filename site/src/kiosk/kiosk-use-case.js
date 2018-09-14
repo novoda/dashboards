@@ -1,6 +1,5 @@
 import * as Actions from './kiosk-actions'
 import { watchDeviceData } from '../dashboard-repository'
-import { loadHtml } from '../common/html-loader'
 
 export const watchAnonymousStateChange = (dispatch, auth) => () => {
     return auth.onAuthStateChanged(user => {
@@ -16,11 +15,7 @@ export const watchAnonymousStateChange = (dispatch, auth) => () => {
 
 export const watchDeviceContent = (dispatch) => (deviceId) => {
     return watchDeviceData(deviceId, (url) => {
-        loadHtml(url).then(html => {
-            dispatch(Actions.onDeviceContent(html))
-        }).catch(error => {
-            dispatch(Actions.onDeviceContentError(error))
-        })
+        dispatch(Actions.onDeviceContent(url))
     })
 }
 export const resetDeviceContent = (dispatch) => {

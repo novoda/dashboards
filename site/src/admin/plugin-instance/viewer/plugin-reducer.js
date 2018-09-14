@@ -2,14 +2,14 @@ import { handleActions } from 'redux-actions'
 import * as Actions from './plugin-actions'
 
 const initialState = {
-    html: undefined
+    url: undefined
 }
 
 export const plugin = handleActions({
     [Actions.ON_PLUGIN_CONTENT]: (state, action) => {
-        return { ...state, html: action.payload }
+        return { ...state, url: action.payload }
     },
     [Actions.ON_RESET_PLUGIN_CONTENT]: (state, action) => {
-        return { ...state, html: undefined }
+        return { ...state, url: undefined }
     }
 }, initialState)

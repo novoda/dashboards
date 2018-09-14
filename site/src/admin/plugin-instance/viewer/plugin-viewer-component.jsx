@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import * as UseCase from './plugin-use-case'
-import { ContentView } from '../../../common/viewer/content-view'
+import ContentComponent from '../../../common/viewer/content-component'
 
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
@@ -10,11 +10,7 @@ import 'firebase/database'
 class Component extends React.Component {
 
     render() {
-        if (this.props.id) {
-            return <ContentView viewState={this.props} />
-        } else {
-            return null
-        }
+        return <ContentComponent url={this.props.url} />
     }
 
     componentDidMount() {
@@ -29,12 +25,11 @@ class Component extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const { html } = state.pluginInstanceViewer
+    const { url } = state.pluginInstanceViewer
     const { instanceId } = ownProps.match.params
     return {
         id: instanceId,
-        isProvisioned: html ? true : false,
-        html
+        url
     }
 }
 

@@ -2,8 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import * as UseCase from './kiosk-use-case'
 import * as Actions from './kiosk-actions'
-import { ContentView } from '../common/viewer/content-view'
-import ErrorView from './error-view'
+import ContentComponent from '../common/viewer/content-component'
 
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
@@ -12,15 +11,7 @@ import 'firebase/database'
 class Component extends React.Component {
 
     render() {
-        if (this.props.id) {
-            if (this.props.error) {
-                return <ErrorView error={this.props.error} />
-            } else {
-                return <ContentView viewState={this.props} />
-            }
-        } else {
-            return null
-        }
+        return <ContentComponent url={this.props.url} />
     }
 
     componentDidMount() {
@@ -51,12 +42,12 @@ class Component extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const { deviceId, html, error } = state.kiosk
+    console.log(state)
+    
+    const { deviceId, url } = state.kiosk
     return {
         id: deviceId,
-        isProvisioned: html ? true : false,
-        html,
-        error
+        url
     }
 }
 

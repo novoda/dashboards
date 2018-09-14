@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions'
 import * as Actions from './topic-actions'
 
 const initialState = {
-    html: undefined
+    url: undefined
 }
 
 export const topic = handleActions({

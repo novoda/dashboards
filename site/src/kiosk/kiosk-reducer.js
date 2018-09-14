@@ -3,8 +3,7 @@ import * as Actions from './kiosk-actions'
 
 const initialState = {
     deviceId: undefined,
-    html: undefined,
-    error: undefined
+    url: undefined
 }
 
 export const kiosk = handleActions({
@@ -12,12 +11,9 @@ export const kiosk = handleActions({
         return { ...state, deviceId: action.payload }
     },
     [Actions.ON_DEVICE_CONTENT]: (state, action) => {
-        return { ...state, html: action.payload, error: undefined }
-    },
-    [Actions.ON_DEVICE_CONTENT_ERROR]: (state, action) => {
-        return { ...state, html: undefined, error: action.payload }
+        return { ...state, url: action.payload }
     },
     [Actions.ON_RESET_DEVICE_CONTENT]: (state, action) => {
-        return { ...state, html: undefined }
+        return { ...state, url: undefined }
     }
 }, initialState)
