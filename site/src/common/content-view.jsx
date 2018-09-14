@@ -25,7 +25,7 @@ const styles = {
 
 const toItem = (clickThrough, onDelete) => (item) => {
     return (
-        <div style={{ position: 'relative' }}>
+        <div key={item.id} style={{ position: 'relative' }}>
             {onDelete
                 ? <OptionsMenu onDelete={() => onDelete(item)} />
                 : null}
