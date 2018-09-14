@@ -61,22 +61,18 @@ module.exports = class HtmlRepository {
                 const files = filesWrapper[0]
                 return Promise.all(files.map(file => {
                     return file.getMetadata().then(result => {
-                        console.log("!!")
-                        console.log(result[0])
-                        return Object.assign(file, { metadata: result[0] })
+                        return { file: file, metadata: result[0] }
                     })
                 }))
-            }).then(files => {
-                console.log("!!!")
-                console.log(files[0])
-                const deleteFiles = files
-                    .filter(file => file.metadata.metadata.expires + THREE_MINUTES < Date.now())
-                    .map(file => {
-                        console.log(`delete: ${file.name}`)
-                        return file
+            }).then(bundles => {
+                const deleteFiles = bundles
+                    .filter(bundle => bundle.metadata.metadata.expires + THREE_MINUTES < Date.now())
+                    .map(bundle => {
+                        console.log(`delete: ${bundle.file.name}`)
+                        return bundle.file
                             .delete()
                             .catch(err => {
-                                console.warn('Failed to delete file', file.name, err)
+                                console.warn('Failed to delete file', bundle.file.name, err)
                             })
                     })
                 return Promise.all(deleteFiles)
