@@ -61,7 +61,6 @@ class App extends React.Component {
                     <MuiThemeProvider>
                         <BrowserRouter>
                             <Switch>
-                                <Route exact path="/" component={KioskComponent} />
                                 <Route exact path="/kiosk" component={KioskComponent} />
                                 <Route path="/*" component={AuthComponent} />
                             </Switch>
