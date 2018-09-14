@@ -59,6 +59,12 @@ module.exports = class HtmlRepository {
         return this.bucket.getFiles()
             .then(filesWrapper => {
                 const files = filesWrapper[0]
+                return Promise.all(files.map(file => {
+                    return file.getMetadata().then(result => {
+                        return Object.assign(file, { metadata: result[0] })
+                    })
+                }))
+            }).then(files => {
                 console.log("!!!")
                 console.log(files[0])
                 const deleteFiles = files
