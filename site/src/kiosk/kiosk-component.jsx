@@ -42,8 +42,6 @@ class Component extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    console.log(state)
-    
     const { deviceId, url } = state.kiosk
     return {
         id: deviceId,
