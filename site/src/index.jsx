@@ -38,9 +38,8 @@ class App extends React.Component {
                     <MuiThemeProvider>
                         <BrowserRouter>
                             <Switch>
-                                <Route exact path="/" component={KioskComponent} />
                                 <Route exact path="/kiosk" component={KioskComponent} />
-                                <Route exact path="/landing" component={LandingComponent} />
+                                <Route exact path="/" component={LandingComponent} />
                                 <Route path="/topic/:topicId" component={TopicComponent} />
                                 <Route exact path="/admin" component={HomeComponent} />
                                 <Route path="/admin/plugins/add" render={(props) => <PluginComponent type='add' {...props} />} />
