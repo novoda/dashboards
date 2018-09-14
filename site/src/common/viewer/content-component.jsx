@@ -21,7 +21,7 @@ export default class ContentComponent extends React.Component {
         } else if (this.state.error) {
             return <ErrorView error={this.state.error} />
         } else if (this.props.url) {
-            return <ContentView viewState={this.state} />
+            return <ContentView html={this.state.html} />
         } else {
             return null
         }
