@@ -1,4 +1,4 @@
-import { readPluginInstancesForPluginId, readPlugin } from '../../dashboard-repository'
+import { readPluginInstancesForPluginId, readPlugin, removePluginInstance } from '../../dashboard-repository'
 import * as Actions from './plugin-actions'
 import config from '../../config'
 
@@ -22,4 +22,8 @@ export const addPlugin = (dispatch) => async (endpoint) => {
             'Content-Type': 'application/json'
         }
     })
+}
+
+export const deletePluginInstance = (dispatch) => async (pluginId, instanceId) => {
+    await removePluginInstance(pluginId, instanceId)
 }

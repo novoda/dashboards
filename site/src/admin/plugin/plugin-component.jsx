@@ -14,7 +14,10 @@ class Component extends React.Component {
                     this.props.history.goBack()
                 }}
                 onUpdateEndpoint={this._onUpdatePluginEndpoint.bind(this)}
-                onAddPlugin={this._addPlugin.bind(this)} />
+                onAddPlugin={this._addPlugin.bind(this)}
+                onDeletePluginInstance={(instance) => {
+                    this._deletePluginInstance(this.props.plugin, instance)
+                }} />
         )
     }
 
@@ -29,6 +32,10 @@ class Component extends React.Component {
     _addPlugin() {
         this.props.addPlugin(this.props.plugin.endpoint)
     }
+
+    _deletePluginInstance(plugin, instance) {
+        this.props.deletePluginInstance(plugin.id, instance.id)
+    }
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -42,10 +49,12 @@ const mapDispatchToProps = (dispatch) => {
     const fetchPlugin = UseCase.fetchPlugin(dispatch)
     const updateEndpoint = UseCase.updateEndpoint(dispatch)
     const addPlugin = UseCase.addPlugin(dispatch)
+    const deletePluginInstance = UseCase.deletePluginInstance(dispatch)
     return {
         fetchPlugin: (id) => fetchPlugin(id),
         updateEndpoint: (endpoint) => updateEndpoint(endpoint),
-        addPlugin: (endpoint) => addPlugin(endpoint)
+        addPlugin: (endpoint) => addPlugin(endpoint),
+        deletePluginInstance: (pluginId, instanceId) => deletePluginInstance(pluginId, instanceId)
     }
 }
 

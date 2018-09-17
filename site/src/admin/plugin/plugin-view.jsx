@@ -10,9 +10,9 @@ const toContent = (instance) => {
     }
 }
 
-export const PluginView = ({ isEditing, plugin, onBack, onUpdateEndpoint, onAddPlugin }) => {
+export const PluginView = ({ isEditing, plugin, onBack, onUpdateEndpoint, onAddPlugin, onDeletePluginInstance }) => {
     if (isEditing) {
-        return <PluginDetailsView plugin={plugin} onBack={onBack} />
+        return <PluginDetailsView plugin={plugin} onBack={onBack} onDelete={onDeletePluginInstance} />
     } else {
         return <AddPluginView
             endpoint={plugin.endpoint}
@@ -42,13 +42,14 @@ const AddPluginView = ({ endpoint, onUpdateEndpoint, onAddPlugin, onBack }) => {
     )
 }
 
-const PluginDetailsView = ({ plugin, onBack }) => {
+const PluginDetailsView = ({ plugin, onBack, onDelete }) => {
     return (
         <div>
             <AppBarView title={plugin.name} onBack={onBack} />
             <ContentView
                 content={plugin.instances.map(toContent)}
-                clickThrough={`/admin/plugins/${plugin.id}`} />
+                clickThrough={`/admin/plugins/${plugin.id}`}
+                onDelete={onDelete} />
             <AddFabView link={`/admin/plugins/${plugin.id}/add`} />
         </div>
     );

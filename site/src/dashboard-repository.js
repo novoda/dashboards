@@ -194,6 +194,10 @@ export const removePlugin = (pluginId) => {
     return firebase.remove(`plugins/${pluginId}`)()
 }
 
+export const removePluginInstance = (pluginId, pluginInstanceId) => {
+    return firebase.remove(`plugin_instances/${pluginId}/${pluginInstanceId}`)()    
+}
+
 export const removeTopic = (topicId) => {
     return firebase.remove(`topics/${topicId}`)()
 }
