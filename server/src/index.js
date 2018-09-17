@@ -195,7 +195,7 @@ exports.onPluginInstanceDeleted = functions.database.ref('v2/plugin_instances/{p
 exports.onPluginInstanceDeletedFromTopic = functions.database.ref('v2/plugin_instance_to_topic/{instanceId}/{topicId}').onDelete((snapshot, context) => {
     const instanceId = context.params.instanceId
     const topicId = context.params.topicId
-    return admin.database().ref(`/v2/topics/${topicId}/pluginInstances/{instanceId}`).remove()
+    return admin.database().ref(`/v2/topics/${topicId}/pluginInstances/${instanceId}`).remove()
 })
 
 exports.onPluginInstanceRemovedFromTopic = functions.database.ref('/v2/topics/{topicId}/plugin_instances/{instanceId}').onDelete((snapshot, context) => {
