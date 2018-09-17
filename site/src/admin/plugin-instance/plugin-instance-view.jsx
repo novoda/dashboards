@@ -20,7 +20,7 @@ export const PluginInstanceView = ({ title, submitLabel, instanceView, onBack, o
             <RaisedButton
                 label={submitLabel}
                 primary={true}
-                onTouchTap={onSubmit}
+                onClick={onSubmit}
             />
         </div>
     )

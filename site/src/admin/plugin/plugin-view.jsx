@@ -37,7 +37,7 @@ const AddPluginView = ({ endpoint, onUpdateEndpoint, onAddPlugin, onBack }) => {
             <RaisedButton
                 label={'Add'}
                 primary={true}
-                onTouchTap={onAddPlugin} />
+                onClick={onAddPlugin} />
         </div>
     )
 }
