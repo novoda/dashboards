@@ -91,14 +91,12 @@ exports.masterTick = functions.https.onRequest((request, response) => {
 exports.onPluginInstancesDataUpdated = functions.database.ref('/v2/plugin_instances_data/{pluginInstanceId}').onWrite((change, context) => {
     const pluginInstanceId = context.params.pluginInstanceId
     const updatedHtml = change.after.val()
-    console.log('instance data updated', pluginInstanceId)
     return actions.queryTopicIdsForPluginInstance(pluginInstanceId)
         .then(topicIds => {
             const updateHtml = topicIds.map(topicId => {
-                console.log('set html', topicId, pluginInstanceId)
                 return actions.applyHtmlToTopicPluginInstanceData(topicId, pluginInstanceId, updatedHtml)
             })
-            return Promise.all(updatedHtml)
+            return Promise.all(updateHtml)
         })
         .catch(err => {
             console.log('Failed to update topic data as the instance is not in a topic', pluginInstanceId, err)
@@ -108,9 +106,6 @@ exports.onPluginInstancesDataUpdated = functions.database.ref('/v2/plugin_instan
 exports.pluginCallback = functions.https.onRequest((request, response) => {
     const pluginInstanceId = request.query.pluginInstanceId
     const html = request.body.html
-
-    console.log('plugin callback', pluginInstanceId)
-
     return htmlRepository.store(pluginInstanceId, html)
         .then(url => {
             actions.applyPluginInstanceDataHtml(pluginInstanceId, url)
