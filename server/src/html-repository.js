@@ -66,7 +66,12 @@ module.exports = class HtmlRepository {
                 }))
             }).then(bundles => {
                 const deleteFiles = bundles
-                    .filter(bundle => bundle.metadata.metadata)
+                    .filter(bundle => Boolean(bundle.metadata.metadata))
+                    .map(each => {
+                        console.log("!!! for pruning:")
+                        console.log(each)
+                        return each
+                    })
                     .filter(bundle => bundle.metadata.metadata.expires + THREE_MINUTES < Date.now())
                     .map(bundle => {
                         console.log(`delete: ${bundle.file.name}`)
