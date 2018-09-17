@@ -1,4 +1,4 @@
-import { readTopics, setDevice, setDeviceTopic, readDevice } from '../../dashboard-repository'
+import { readTopics, setDevice, setDeviceTopic, readDevice, removeDevice } from '../../dashboard-repository'
 import * as Actions from './device-actions'
 
 export const fetchTopics = (dispatch) => async () => {
@@ -20,10 +20,14 @@ export const fetchTopicsWithDevice = (dispatch) => async (deviceId) => {
     dispatch(Actions.topicsWithDeviceLoaded(payload))
 }
 
-export const updateDevice = async (device) => {
+export const updateDevice = async (previousId, device) => {
     const devicePayload = {
         name: device.name,
         topic_id: device.selectedTopicId
+    }
+
+    if (previousId !== undefined && previousId !== device.id) {
+        await removeDevice(previousId)
     }
     await setDevice(device.id)(devicePayload)
     await setDeviceTopic(device.selectedTopicId, device.id)

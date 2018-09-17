@@ -47,7 +47,7 @@ class Component extends React.Component {
     }
 
     _onUpdateDevice() {
-        this.props.updateDevice(this.props.deviceView)
+        this.props.updateDevice(this.props.deviceId, this.props.deviceView)
     }
 }
 
