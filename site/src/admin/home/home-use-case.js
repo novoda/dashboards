@@ -1,4 +1,4 @@
-import { readDevices, readPlugins, readTopics, removeDevice, removePlugin } from '../../dashboard-repository'
+import { readDevices, readPlugins, readTopics, removeTopic, removeDevice, removePlugin } from '../../dashboard-repository'
 import * as Actions from './home-actions'
 
 export const fetchDevices = (dispatch) => async () => {
