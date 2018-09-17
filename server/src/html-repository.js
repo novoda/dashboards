@@ -67,9 +67,10 @@ module.exports = class HtmlRepository {
             }).then(bundles => {
                 const deleteFiles = bundles
                     .map(each => {
-                        console.log("!!! for pruning:")
-                        console.log(each)
-                        console.log(`isValid: ${Boolean(bundle.metadata.metadata)}`)
+                        console.log("!!! for pruning:", each)
+                        try {
+                            console.log(`isValid: ${Boolean(each.metadata.metadata)}, type: ${typeof each.metadata.metadata}`)
+                        } catch (err) { }
                         return each
                     })
                     .filter(bundle => Boolean(bundle.metadata.metadata))
