@@ -66,17 +66,9 @@ module.exports = class HtmlRepository {
                 }))
             }).then(bundles => {
                 const deleteFiles = bundles
-                    .map(each => {
-                        console.log("!!! for pruning:", each)
-                        try {
-                            console.log(`isValid: ${Boolean(each.metadata.metadata)}, type: ${typeof each.metadata.metadata}`)
-                        } catch (err) { }
-                        return each
-                    })
                     .filter(bundle => Boolean(bundle.metadata.metadata))
                     .map(each => {
-                        console.log("!!! for pruning:")
-                        console.log(each)
+                        console.log(`isValid: ${Boolean(each.metadata.metadata)}, type: ${typeof each.metadata.metadata.expires}`)
                         return each
                     })
                     .filter(bundle => bundle.metadata.metadata.expires + THREE_MINUTES < Date.now())
