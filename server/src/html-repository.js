@@ -42,7 +42,6 @@ module.exports = class HtmlRepository {
             .then(() => this._generateSignedUrl(file, expiryTime))
             .catch(err => {
                 console.error('Failed to refresh URL', filePath, err)
-                throw err
             })
     }
 
