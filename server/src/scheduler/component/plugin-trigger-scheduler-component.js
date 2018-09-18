@@ -23,7 +23,6 @@ const tickAllPlugins = (projectId, http) => (pluginInstances) => {
             callbackUrl: `https://us-central1-${projectId}.cloudfunctions.net/pluginCallback?pluginInstanceId=${instance.pluginInstanceId}`,
             type: 'query'
         }
-        console.log(instance)
         const request = {
             url: instance.queryUrl,
             headers: {

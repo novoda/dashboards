@@ -47,7 +47,10 @@ export const DeviceView = ({ title, submitLabel, device, onBack, onDeviceNameCha
                 <RaisedButton
                     label={submitLabel}
                     primary={true}
-                    onClick={onSubmit}
+                    onClick={() => {
+                        onBack()
+                        onSubmit()
+                    }}
                 />
             </div>
         </div>

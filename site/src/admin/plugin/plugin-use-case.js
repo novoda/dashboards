@@ -26,4 +26,5 @@ export const addPlugin = (dispatch) => async (endpoint) => {
 
 export const deletePluginInstance = (dispatch) => async (pluginId, instanceId) => {
     await removePluginInstance(pluginId, instanceId)
+    await fetchPlugin(dispatch)(pluginId)
 }
