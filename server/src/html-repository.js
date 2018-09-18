@@ -41,7 +41,7 @@ module.exports = class HtmlRepository {
         return file.setMetadata({ metadata: { expires: expiryTime } })
             .then(() => this._generateSignedUrl(file, expiryTime))
             .catch(err => {
-                console.error('Failed to refresh URL', filePath, err)
+                console.info('Failed to refresh URL', filePath, err)
             })
     }
 
