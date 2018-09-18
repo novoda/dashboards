@@ -9,8 +9,8 @@ module.exports = class Scheduler {
         this.components = [
             pluginTriggerComponent(projectId, http, database),
             topicComponent(database),
-            htmlComponent(htmlRepository)
-            // htmlRefresherComponent(database, htmlRepository)
+            htmlComponent(htmlRepository),
+            htmlRefresherComponent(database, htmlRepository)
         ]
     }
 
