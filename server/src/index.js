@@ -71,7 +71,7 @@ exports.onMasterTick = functions.database.ref('/v2/master_index').onUpdate((chan
     const tickValue = change.after.val()
     const projectId = process.env.GCLOUD_PROJECT
     const scheduler = new Scheduler(projectId, http, admin.database(), htmlRepository)
-    return scheduler.tick(tickValue)
+    return scheduler.tick(tickValue).catch(console.error)
 })
 
 exports.masterTick = functions.https.onRequest((request, response) => {
