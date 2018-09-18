@@ -16,7 +16,7 @@ module.exports = (database, htmlRepository) => {
                                     return database.ref(`/v2/plugin_instances_data/${key}`)
                                         .set(refreshedUrl)
                                 }).catch(err => {
-                                    console.err('refresh url error', err)
+                                    console.error('refresh url error', err)
                                 })
                         })
                     return Promise.all(refreshedUrls)
