@@ -19,7 +19,7 @@ const toError = (url, response) => {
 
 const validateExpires = (url) => {
     const query = queryString.parseUrl(url).query
-    if (parseInt(query["Expires"]) >= Date.now() / 1000) {
+    if (parseInt(query["Expires"]) <= Date.now() / 1000) {
         return Promise.reject({
             code: "expired",
             source: url,
