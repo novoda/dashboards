@@ -186,6 +186,10 @@ export const setDeviceTopic = (topicId, deviceId) => {
     return firebase.set(`topic_to_devices/${topicId}/${deviceId}`)(true)
 }
 
+export const removeDeviceTopic = (topicId, deviceId) => {
+    return firebase.remove(`topic_to_devices/${topicId}/${deviceId}`)()
+}
+
 export const removeDevice = (deviceId) => {
     return firebase.remove(`devices/${deviceId}`)()
 }

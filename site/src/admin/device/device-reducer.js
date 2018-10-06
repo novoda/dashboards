@@ -6,7 +6,8 @@ const initialState = {
     name: '',
     selectedTopicId: '',
     availableTopics: [],
-    loading: false
+    loading: false,
+    originalState: {}
 };
 
 export const device = handleActions({
@@ -17,7 +18,7 @@ export const device = handleActions({
         return { ...state, availableTopics: action.payload, loading: false }
     },
     [Actions.ON_TOPICS_WITH_DEVICE_LOADED]: (state, action) => {
-        return { ...action.payload, loading: false }
+        return { ...action.payload, loading: false, originalState: action.payload }
     },
     [Actions.UPDATE_ID]: (state, action) => {
         return { ...state, id: action.payload }
