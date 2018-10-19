@@ -5,7 +5,7 @@ const hasExpired = (database, interval) => (id) => {
   return rootRef.child('lastUpdated')
     .once('value')
     .then(snapshot => snapshot.val())
-    .then(lastUpdated => lastUpdated === null || (lastUpdated > Date.now() + interval))
+    .then(lastUpdated => lastUpdated === null || (lastUpdated < (Date.now() - interval)))
 }
 
 const updateData = (ref, data) => {
@@ -44,11 +44,10 @@ module.exports = (database, pluginInstanceId, interval, generateViewState) => {
   return cache.hasExpired(pluginInstanceId)
     .then(isExpired => {
       if (isExpired) {
-        generateViewState()
+        return generateViewState()
           .then((data) => cache.save(pluginInstanceId, data))
           .then(() => cache.read(pluginInstanceId))
-      }
-      else {
+      } else {
         return cache.read(pluginInstanceId)
       }
     })
