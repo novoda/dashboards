@@ -198,7 +198,7 @@ exports.onPluginInstanceRemovedFromTopic = functions.database.ref('/v2/topics/{t
     const topicId = context.params.topicId
     return actions.removePluginInstanceFromTopic(pluginInstanceId, topicId)
 })
-c
+
 exports.onTopicDeleted = functions.database.ref('/v2/topics/{topicId}').onDelete((snapshot, context) => {
     const topicId = context.params.topicId
     return actions.removeTopic(topicId)
