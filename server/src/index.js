@@ -149,8 +149,9 @@ exports.addPlugin = functions.https.onRequest((request, response) => {
 })
 
 exports.onDeviceDeleted = functions.database.ref('/v2/devices/{deviceId}').onDelete((snapshot, context) => {
+    const database = admin.database()
     const deviceId = context.params.deviceId
-    const devicesData = admin.database().ref(`/v2/devices_data/${deviceId}`).remove()
+    const devicesData = database.ref(`/v2/devices_data/${deviceId}`).remove()
 
     const topicToDevice = actions.queryTopicsForAllDevices()
         .then(value => {
