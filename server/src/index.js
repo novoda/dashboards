@@ -171,12 +171,12 @@ exports.onDeviceDeleted = functions.database.ref('/v2/devices/{deviceId}').onDel
     return Promise.all([devicesData, topicToDevice])
 })
 
-exports.onPluginDeleted = functions.database.ref('v2/plugins/{pluginId}').onDelete((snapshot, context) => {
+exports.onPluginDeleted = functions.database.ref('/v2/plugins/{pluginId}').onDelete((snapshot, context) => {
     const pluginId = context.params.pluginId
     return admin.database().ref(`/v2/plugin_instances/${pluginId}`).remove()
 })
 
-exports.onPluginInstanceDeleted = functions.database.ref('v2/plugin_instances/{pluginId}/{instanceId}').onDelete((snapshot, context) => {
+exports.onPluginInstanceDeleted = functions.database.ref('/v2/plugin_instances/{pluginId}/{instanceId}').onDelete((snapshot, context) => {
     const database = admin.database()
     const instanceId = context.params.instanceId
     const cleanUp = [
@@ -187,7 +187,7 @@ exports.onPluginInstanceDeleted = functions.database.ref('v2/plugin_instances/{p
     return Promise.all(cleanUp)
 })
 
-exports.onPluginInstanceDeletedFromTopic = functions.database.ref('v2/plugin_instance_to_topic/{instanceId}/{topicId}').onDelete((snapshot, context) => {
+exports.onPluginInstanceDeletedFromTopic = functions.database.ref('/v2/plugin_instance_to_topic/{instanceId}/{topicId}').onDelete((snapshot, context) => {
     const instanceId = context.params.instanceId
     const topicId = context.params.topicId
     return admin.database().ref(`/v2/topics/${topicId}/pluginInstances/${instanceId}`).remove()
@@ -198,8 +198,8 @@ exports.onPluginInstanceRemovedFromTopic = functions.database.ref('/v2/topics/{t
     const topicId = context.params.topicId
     return actions.removePluginInstanceFromTopic(pluginInstanceId, topicId)
 })
-
-exports.onTopicDeleted = functions.database.ref('v2/topics/{topicId}').onDelete((snapshot, context) => {
+c
+exports.onTopicDeleted = functions.database.ref('/v2/topics/{topicId}').onDelete((snapshot, context) => {
     const topicId = context.params.topicId
     return actions.removeTopic(topicId)
 })
