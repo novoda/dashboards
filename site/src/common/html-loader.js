@@ -1,5 +1,7 @@
 import * as queryString from 'query-string'
 
+const EXPIRY_OFFSET_SECONDS = 40
+
 export const loadHtml = (url) => {
     return validateExpires(url)
         .then(fetch)
@@ -19,7 +21,8 @@ const toError = (url, response) => {
 
 const validateExpires = (url) => {
     const query = queryString.parseUrl(url).query
-    if (parseInt(query["Expires"]) <= Date.now() / 1000) {
+    const expires = parseInt(query["Expires"])
+    if (expires - EXPIRY_OFFSET_SECONDS <= Date.now() / 1000) {
         return Promise.reject({
             code: "expired",
             source: url,
