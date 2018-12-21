@@ -911,10 +911,10 @@ firebase-admin@^6.4.0:
     "@google-cloud/storage" "^1.6.0"
     "@types/google-cloud__storage" "^1.7.1"
 
-firebase-functions@^2.0.5:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/firebase-functions/-/firebase-functions-2.0.5.tgz#61b085e6bdd5f0feda4f1942549fe78530b3933e"
-  integrity sha512-XedOTdaej68I/AmJyeDIKL2Cw6MwI7Ugov5QoEsOU9bh25iAseZmFKFQeqimW5Wb9wKLAli2Wq8ld+FtdOwdvQ==
+firebase-functions@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/firebase-functions/-/firebase-functions-2.1.0.tgz#10973f9055092aaa8ed5bd26410426a9790a99ea"
+  integrity sha512-gvWjfIu/q0jXSE/4JY+6XZyJWVzk0TeGLJAfKE4Y7W/cUxkycogc7EIBJSEMdHnxFAD3GE6VgCrhtTTmUud6Sw==
   dependencies:
     "@types/cors" "^2.8.1"
     "@types/express" "^4.11.1"
