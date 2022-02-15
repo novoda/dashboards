@@ -1,3 +1,5 @@
+# 🛑 THIS REPOSITORY IS OFFICIALLY NO LONGER UNDER MAINTENANCE since 14/02/2022 ❤️ 🛑
+
 ## About 
 Novoda dashboards share 'at a glance' challenges and experiences of our globally distributed colleagues.
 Dashboards are viewed in two differents contexts: _Office_ & _Project_.
